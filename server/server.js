@@ -2,7 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import routes from './routes';
+import auth from './routes/auth';
+import users from './routes/users';
+import boards from './routes/boards.js';
+import lists from './routes/lists.js';
+import cards from './routes/cards.js';
+import checklists from './routes/checklists.js';
 
 dotenv.config();
 
@@ -28,6 +33,12 @@ const app = express();
 app.use(cors());
 
 // Routes 
+app.use('/api/users', users);
+app.use('/api/auth', auth);
+app.use('/api/boards', boards);
+app.use('/api/lists', lists);
+app.use('/api/cards', cards);
+app.use('/api/checklists', checklists);
 
 // Server config listen to PORT
 const PORT = process.env.PORT || 5001;
