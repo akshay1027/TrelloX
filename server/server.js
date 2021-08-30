@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import auth from './routes/auth';
+import authentication from './routes/authentication';
 import users from './routes/users';
 import boards from './routes/boards.js';
 import lists from './routes/lists.js';
@@ -34,7 +34,7 @@ app.use(cors());
 
 // Routes 
 app.use('/api/users', users);
-app.use('/api/auth', auth);
+app.use('/api/auth', authentication);
 app.use('/api/boards', boards);
 app.use('/api/lists', lists);
 app.use('/api/cards', cards);
