@@ -1,21 +1,24 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
-export const authenticatedUser = (req, res, next) => {
+const authenticatedUser = (req, res, next) => {
 
     // get token from header
     const token = req.header('auth-token');
+    console.log('hii from middleware');
 
     // check if no token
     if(!token) {
+        console.log('no token');
         return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
     // verify token
     try {
         const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
+        console.log('is jwt verification async task? ');
         /*
             Eg: 
             decodeToken = {
@@ -28,7 +31,12 @@ export const authenticatedUser = (req, res, next) => {
         req.user = decodeToken.user;
         next();
     } catch (error) {
+        console.log('error =', error);
         res.status(401).json({ msg: 'Token is invalid' });
     }
  
 }
+
+module.exports = {
+    authenticatedUser
+};

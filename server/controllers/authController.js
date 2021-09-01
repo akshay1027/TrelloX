@@ -1,20 +1,16 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import { validationResult } from 'express-validator';
-import dotenv from 'dotenv';
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { validationResult, check } = require('express-validator');
+const dotenv = require('dotenv');
 
 // User DB modal
-import {UserModal} from '../models/userModal';
+const UserModal = require('../models/userModal.js');
 
 dotenv.config();
 
 // =========> Authenticate user & get token
-export const signInUser = async(req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        console.log(errors.array());
-        return res.status(400).json({ errors: errors.array() });
-    }
+const signInUser = async(req, res) => {
 
     // destructuring request
     const { email, password } = req.body;
@@ -53,21 +49,17 @@ export const signInUser = async(req, res) => {
 }
 
 // =========> Signup user and get token  
-export const signUpUser = async(req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        console.log(errors.array());
-        return res.status(400).json({ errors: errors.array() });
-    }
+const signUpUser = async(req, res) => {
 
-    const { email, password, userName} = req.body;
+    console.log(req.body);
+    const { email, password, name} = req.body;
 
     try {
         // check if User exists already
         let isUserExists =  await UserModal.findOne({ email });
 
-        if(!isUserExists) {
-            return res.status(400).json({ errors: [{ msg: 'User wirh this Email ID Already Exists'}]})
+        if(isUserExists) {
+            return res.status(400).json({ errors: [{ msg: 'User with this Email ID Already Exists'}]})
         }
 
         const generateSalt =  await bcrypt.genSalt(10);
@@ -77,7 +69,7 @@ export const signUpUser = async(req, res) => {
 
         // Create newUser and save New User to DB
         const newUser = new UserModal({
-            userName,
+            name,
             email,
             password: hashedPassword
         });
@@ -87,7 +79,7 @@ export const signUpUser = async(req, res) => {
         // Returb new generated token
         jwt.sign(
             {
-              user: {id: user.id,},
+              user: {id: newUser.id,},
             },
             process.env.JWT_SECRET,
             { expiresIn: 360000 },
@@ -103,12 +95,18 @@ export const signUpUser = async(req, res) => {
 }
 
 // =========> Get User Details after logging in
-export const getUserDetails = async(req, res) => {
+const getUserDetails = async(req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password');
-        res.json(user);
+        const user = await UserModal.findById(req.user.id).select('-password');
+        return res.json(user);
     } catch (error) {
-        console.error(err.message);
-        res.status(500).send('Internal server error');
+        console.error(error.message);
+        return res.status(500).send('Internal server error');
     }
 }
+
+module.exports = {
+    signInUser,
+    signUpUser,
+    getUserDetails
+};

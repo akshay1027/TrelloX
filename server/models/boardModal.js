@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+const { Schema, model } = require('mongoose');
 
 // Boards -> 1) boardTitle (string)
 //           2) activity (Array of Objects)
@@ -30,4 +30,4 @@ const boardSchema = new Schema(
     }
 )
 
-export const BoardModal = model('Board', boardSchema);
+module.exports = BoardModal = model('Board', boardSchema);

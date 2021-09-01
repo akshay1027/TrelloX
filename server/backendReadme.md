@@ -14,3 +14,15 @@
 4) Store request body data to DB.
 5) Generate a new JWT token for the user.
 6) Send JWT token as responce.
+
+### validate data in middleware:
+Approach: We shouldn't handle validation error in our controller. So If any error is occurring at Validation Layer, it should throw back from there only. We shouldn't allow our control flow to enter into the Controller Layer.
+
+RootServer -> Routes -> Middlewares(authorisation + validation) -> Controllers
+
+### All the bugs and errors i faced: 
+- Not parsing data in backend. resulted in undefined error.
+- Typo in modal schema, resulted in head ache for hours!
+- Did not know the correct procedure of using express validator. finally used it as an middleware.
+- Was validating the request in routes and handled error in controller(if any). Learnt from stackoverflow that we shouldn't handle validation error in our controller.
+- Learnt about new mongoose methods to do CRUD operations.

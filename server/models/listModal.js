@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+const { Schema, model } = require('mongoose');
 
 const listSchema = new Schema(
     {
@@ -10,4 +10,4 @@ const listSchema = new Schema(
     }
 )
 
-export const ListModal = model('List', listSchema);
+module.exports = ListModal = model('List', listSchema);

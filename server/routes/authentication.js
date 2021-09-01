@@ -1,27 +1,25 @@
-import express from 'express';
-import {check, validationResult} from 'express-validator';
-import {
+const express = require('express');
+
+const {
     signInUser,
     getUserDetails,
     signUpUser
-} from '../controllers/authController';
+} = require('../controllers/authController.js');
+
+const {
+    signInValidation,
+    signUpValidation
+} = require('../middlewares/validators/authValidation');
 
 // Middleware to check if user is Authenticated
-import { authenticatedUser } from '../middlewares/authenticatedUser';
+const { authenticatedUser } = require('../middlewares/authorization/authenticatedUser');
 
 const router = express.Router();
 
-router.post('/signin', [
-        check('email', 'Email is required').isEmail(),
-        check('password', 'Password is required').exists(),
-    ], signInUser 
-);
+router.post('/signin', signInValidation, signInUser);
 
 router.get('/', authenticatedUser, getUserDetails);
 
-router.post('/signUp', [
-    check('name', 'Name is Required').notEmpty(),
-    check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
-    ], signUpUser
-)
+router.post('/signUp', signUpValidation, signUpUser);
+
+module.exports = router;

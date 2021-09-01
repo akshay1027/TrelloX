@@ -1,11 +1,10 @@
-import {Schema, model} from 'mongoose';
-import { BoardModal } from './boardModal';
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema(
     { 
         name: {type: String, required: true},
         email: {type: String, required: true, unique: true},
-        pasword: {type: String, required: true},
+        password: {type: String, required: true},
         profileImage: {type: String},
         activity: [
             {
@@ -20,6 +19,6 @@ const userSchema = new Schema(
     {
         timestamps: true
     }
-)
+);
 
-export const UserModal = model('User', userSchema);
+module.exports =  UserModal = model('User', userSchema);
