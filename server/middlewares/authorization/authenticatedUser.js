@@ -7,18 +7,18 @@ const authenticatedUser = (req, res, next) => {
 
     // get token from header
     const token = req.header('auth-token');
-    console.log('hii from middleware');
+    // console.log('hii from middleware');
 
     // check if no token
     if(!token) {
-        console.log('no token');
+        // console.log('no token');
         return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
     // verify token
     try {
         const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('is jwt verification async task? ');
+        // console.log('is jwt verification async task? ');
         /*
             Eg: 
             decodeToken = {
@@ -34,7 +34,6 @@ const authenticatedUser = (req, res, next) => {
         console.log('error =', error);
         res.status(401).json({ msg: 'Token is invalid' });
     }
- 
 }
 
 module.exports = {

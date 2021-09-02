@@ -1,7 +1,5 @@
-const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { validationResult, check } = require('express-validator');
 const dotenv = require('dotenv');
 
 // User DB modal

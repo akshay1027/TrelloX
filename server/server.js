@@ -4,11 +4,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const authentication = require('./routes/authentication');
-// const users = require('./routes/users';
-// const boards = require('./routes/boards.js';
-// const lists = require('./routes/lists.js';
-// const cards = require('./routes/cards.js';
-// const checklists = require('./routes/checklists.js';
+// const users = require('./routes/users');
+const boards = require('./routes/boards');
+// const lists = require('./routes/lists');
+// const cards = require('./routes/cards');
+// const checklists = require('./routes/checklists');
 
 dotenv.config();
 
@@ -34,13 +34,13 @@ const app = express();
 app.use(cors());
 
 // parse incoming data
-app.use(express.json({ extended: false }));
+app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
 // Routes 
 // app.use('/api/users', users);
 app.use('/api/auth', authentication);
-// app.use('/api/boards', boards);
+app.use('/api/boards', boards);
 // app.use('/api/lists', lists);
 // app.use('/api/cards', cards);
 // app.use('/api/checklists', checklists);

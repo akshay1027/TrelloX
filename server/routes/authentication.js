@@ -18,7 +18,7 @@ const router = express.Router();
 
 router.post('/signin', signInValidation, signInUser);
 
-router.get('/', authenticatedUser, getUserDetails);
+router.get('/userDetails', authenticatedUser, getUserDetails);
 
 router.post('/signUp', signUpValidation, signUpUser);
 

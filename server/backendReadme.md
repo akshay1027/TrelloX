@@ -26,3 +26,7 @@ RootServer -> Routes -> Middlewares(authorisation + validation) -> Controllers
 - Did not know the correct procedure of using express validator. finally used it as an middleware.
 - Was validating the request in routes and handled error in controller(if any). Learnt from stackoverflow that we shouldn't handle validation error in our controller.
 - Learnt about new mongoose methods to do CRUD operations.
+- common js (deafult | const, require syntax) VS esjs (we have to specify type: 'module' in package.json | import, from syntax)
+
+
+### API Documentation: 
