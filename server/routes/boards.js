@@ -1,18 +1,22 @@
-import express from 'express';
-import {check} from 'express-validator';
-import {
-    signInUser,
-    getUserDetails,
-    signUpUser
-} from '../controllers/authController.js';
+const express = require('express');
+
+const { 
+    addNewBoard,
+    allBoards,
+    boardById
+    } = require('../controllers/boardsController');
 
 // Middleware to check if user is Authenticated
-import { authenticatedUser } from '../middlewares/authorization/authenticatedUser.js';
+const { authenticatedUser } = require('../middlewares/authorization/authenticatedUser');
+
+const { addNewBoardValidation } = require('../middlewares/validators/boardValidation');
 
 const router = express.Router();
 
-router.post('/', [
-        authenticatedUser,
-        [check('title', 'Board title is required').notEmpty()]
-    ]
-);
+router.post('/newBoard', authenticatedUser, addNewBoardValidation, addNewBoard );
+
+router.get('/allBoards', authenticatedUser, allBoards );
+
+router.get('/:boardTitle/:id', authenticatedUser, boardById);
+
+module.exports = router;
