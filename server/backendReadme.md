@@ -30,3 +30,16 @@ RootServer -> Routes -> Middlewares(authorisation + validation) -> Controllers
 
 
 ### API Documentation: 
+
+
+### mongo db 
+- whenever you find a document using id, email or any other value from request data -> always check if present in db or not!
+    eg: 
+        const boardDetails = await BoardModal.findById(boardId);
+        if(!boardDetails) {
+            return res.status(404).json({msg: 'Requested board not found'});
+        }
+
+- commonly used CRUD operations using mongoDB: 
+    1) findById(ID)
+    2) findOne

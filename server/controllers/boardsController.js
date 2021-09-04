@@ -51,8 +51,8 @@ exports.allBoards = async(req, res) => {
            so we use this Id to get all details about the board from BoardModal
         */ 
         for(const boardId of user.boards) {
-            boardDetails = await BoardModal.findById(boardId);
-            allBoards.push(boardDetails);
+            boardData = await BoardModal.findById(boardId);
+            allBoards.push(boardData);
         }
 
         res.status(400).json(allBoards);
@@ -63,7 +63,6 @@ exports.allBoards = async(req, res) => {
 }
 
 // Get All Boards API:  
-
 /* 
     1) Get user id from middleware (authorisation).
     2) Get full details of user using this id.
@@ -75,27 +74,66 @@ exports.allBoards = async(req, res) => {
 */
 
 // Get a board by id
-
-exports.boardById = async(req, res) => {
+exports.getBoardById = async(req, res) => {
 
     const boardId = req.params.boardId;
 
     try {
-        const requestedBoard = await BoardModal.findById(req.params.id);
+        const boardData = await BoardModal.findById(boardId);
 
-        if(!requestedBoard) {
+        if(!boardData) {
             return res.status(404).json({msg: 'Requested board not found'});
         }
 
-        res.status(200).json(requestedBoard);
+        res.status(200).json(boardData);
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');
     }
 }
 
-
-// Get boards activity
-
-
 // Change boardTitle
+exports.updateBoardTitle = async(req, res) => {
+
+    const boardId = req.params.boardId;
+    const newBoardTitle = req.body.boardTitle;
+
+    try {
+        const boardData = await BoardModal.findById(boardId);
+
+        if(!boardData) {
+            return res.status(404).json({msg: 'Requested board not found'});
+        }
+        
+        if(newBoardTitle !== boardData.boardTitle) {
+            // update old board title with new one.
+            oldBoardTitle = boardData.boardTitle;
+            boardData.boardTitle = newBoardTitle;
+            boardData.activity.unshift({text: `Renamed board (from ${oldBoardTitle})`});
+            await boardData.save();
+        }
+
+        res.status(200).json(boardData);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Internal server error');
+    }
+}
+
+// Get a board's activity
+exports.getBoardActivity = async (req, res) => {
+
+    const boardId = req.params.boardId;
+
+    try {
+        const boardData = await BoardModal.findById(boardId);
+        if (!board) {
+            return res.status(404).json({ msg: 'Board not found' });
+        }
+    
+        res.json(boardData.activity);
+    } catch (err) {
+        console.error(error.message);
+        res.status(500).send('Internal server error');
+    }
+  };
