@@ -1,13 +1,14 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import auth from './routes/auth';
-import users from './routes/users';
-import boards from './routes/boards.js';
-import lists from './routes/lists.js';
-import cards from './routes/cards.js';
-import checklists from './routes/checklists.js';
+const express = require('express');
+const path = require('path');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const authentication = require('./routes/authentication');
+// const users = require('./routes/users');
+const boards = require('./routes/boards');
+// const lists = require('./routes/lists');
+// const cards = require('./routes/cards');
+// const checklists = require('./routes/checklists');
 
 dotenv.config();
 
@@ -32,13 +33,17 @@ const app = express();
 // CORS 
 app.use(cors());
 
+// parse incoming data
+app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+
 // Routes 
-app.use('/api/users', users);
-app.use('/api/auth', auth);
+// app.use('/api/users', users);
+app.use('/api/auth', authentication);
 app.use('/api/boards', boards);
-app.use('/api/lists', lists);
-app.use('/api/cards', cards);
-app.use('/api/checklists', checklists);
+// app.use('/api/lists', lists);
+// app.use('/api/cards', cards);
+// app.use('/api/checklists', checklists);
 
 // Server config listen to PORT
 const PORT = process.env.PORT || 5001;
