@@ -21,7 +21,7 @@ const router = express.Router();
 
 router.post('/newList', authenticatedUser, addNewBoardValidation, addNewList );
 
-router.get('/allLists', authenticatedUser, allLists );
+router.get('/allLists/:boardId', authenticatedUser, allLists );
 
 router.get('/:listId', authenticatedUser, boardIdValidation, getListById);
 
