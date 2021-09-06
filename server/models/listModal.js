@@ -5,7 +5,7 @@ const listSchema = new Schema(
         listTitle: {type: String, required: true},
         achieved: {type: Boolean, required: true, default: false},
         cards: [
-            {type: Schema.Types.ObjectId, ref: 'Board'}
+            {type: Schema.Types.ObjectId, ref: 'Card'}
         ]
     }
 )

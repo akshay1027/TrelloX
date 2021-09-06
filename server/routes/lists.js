@@ -3,30 +3,31 @@ const express = require('express');
 const { 
     addNewList,
     allLists,
-    getListById,
-    getBoardActivity,
-    updateList
-} = require('../controllers/boardsController');
+    listById,
+    moveList,
+    updateListTitle
+} = require('../controllers/listsController');
 
 // Middleware to check if user is Authenticated
 const { authenticatedUser } = require('../middlewares/authorization/authenticatedUser');
 
 const { 
-    addNewBoardValidation,
+    addNewListValidation,
+    listIdValidation,
     boardIdValidation,
-    updateBoardTitleValidation 
-} = require('../middlewares/validators/boardValidation');
+    updateListTitleValidation 
+} = require('../middlewares/validators/listValidation');
 
 const router = express.Router();
 
-router.post('/newList', authenticatedUser, addNewBoardValidation, addNewList );
+router.post('/newList', authenticatedUser, addNewListValidation, addNewList);
 
-router.get('/allLists', authenticatedUser, allLists );
+router.get('/allLists/:boardId', authenticatedUser, boardIdValidation, allLists);
 
-router.get('/:listId', authenticatedUser, boardIdValidation, getListById);
+router.get('/:listId', authenticatedUser, listIdValidation, listById);
 
-router.patch('updateList/:listId', authenticatedUser, updateBoardTitleValidation, updateList);
+router.patch('updateListTitle/:listId', authenticatedUser, updateListTitleValidation, updateListTitle);
 
-router.get('/activity/:listId', authenticatedUser, boardIdValidation, getBoardActivity);
+router.patch('/moveList/:listId', authenticatedUser, listIdValidation, moveList);
 
 module.exports = router;
