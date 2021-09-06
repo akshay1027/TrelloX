@@ -6,8 +6,8 @@ const dotenv = require('dotenv');
 const authentication = require('./routes/authentication');
 // const users = require('./routes/users');
 const boards = require('./routes/boards');
-// const lists = require('./routes/lists');
-// const cards = require('./routes/cards');
+const lists = require('./routes/lists');
+const cards = require('./routes/cards');
 // const checklists = require('./routes/checklists');
 
 dotenv.config();
@@ -41,8 +41,8 @@ app.use(express.json());
 // app.use('/api/users', users);
 app.use('/api/auth', authentication);
 app.use('/api/boards', boards);
-// app.use('/api/lists', lists);
-// app.use('/api/cards', cards);
+app.use('/api/lists', lists);
+app.use('/api/cards', cards);
 // app.use('/api/checklists', checklists);
 
 // Server config listen to PORT

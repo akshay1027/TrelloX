@@ -45,3 +45,17 @@ RootServer -> Routes -> Middlewares(authorisation + validation) -> Controllers
 ### Caching: 
 1)Boards
 2)Lists
+
+### JS core Improvements:
+1) unshift -> inserts at beginning of array. 
+   Problem: The whole arrays indexes has to be shifted by 1. 
+   This will take more.
+   Solution: Use push. But in frontend, do .reverse() when mapping the response data.
+
+### Bugs: 
+1) Route.get() requires a callback function but got a [object Undefined]
+   solution: Whenever you get this, there bug, there is some: 
+   1) spelling mistake
+   2) import, export error
+   3) wrong file location
+

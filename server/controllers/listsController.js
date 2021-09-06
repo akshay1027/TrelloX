@@ -1,10 +1,10 @@
 // Board DB modal & User Modal
 const ListModal = require('../models/listModal');
-const UserModal = require('../models/userModal');
+// const UserModal = require('../models/userModal');
 const BoardModal = require('../models/boardModal');
 
 // Create New list
-exports.addNewList = async (req, res) => {
+exports.addNewList = async(req, res) => {
     
     try {
         const { listTitle } = req.body;
@@ -44,7 +44,7 @@ exports.allLists = async(req, res) => {
             finalLists.push(await ListModal.findById(listId));
         }
     
-        res.status(400).json(finalLists);
+        res.status(200).json(finalLists);
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');
@@ -61,7 +61,7 @@ exports.listById = async(req, res) => {
             res.status(404).json({msg: 'list not found'});
         }
 
-        res.status(400).json(list);
+        res.status(200).json(list);
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');
@@ -84,7 +84,7 @@ exports.updateListTitle = async(req, res) => {
             await list.save();
         }
 
-        res.status(400).json(list);
+        res.status(200).json(list);
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');
@@ -104,8 +104,20 @@ exports.moveList = async(req, res) => {
         const listId = req.param.listId;
         const toIndex = req.body.toIndex ? req.body.toIndex : 0;
         const boardId = req.header('boardId');
-        const board = await Board.findById(boardId);
+        const board = await BoardModal.findById(boardId);
+
+        if(!listId) {
+            res.status(404).json({msg: 'List not found'});
+        }
+
+        // splice(startIndex, remove, addItemsAfterRemovingFromStartIndex)
+        board.lists.splice(board.lists.indexOf(listId), 1); // first remove the list that is changed
+        board.lists.splice(toIndex, 0, listId); // add the removed list to the requested index
+        await board.save();
+
+        res.status(200).send(board.lists);
     } catch (error) {
-        
+        console.error(error.message);
+        res.status(500).send('Internal server error');
     }
 }

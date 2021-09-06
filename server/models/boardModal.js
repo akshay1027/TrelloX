@@ -17,13 +17,13 @@ const boardSchema = new Schema(
         lists: [
             {type: Schema.Types.ObjectId, ref: 'List'}
         ],
-        members: [
-            {
-                _id: false,
-                user: { type: Schema.Types.ObjectId, ref: 'User'},
-                name: { type: String, default: 'admin'}
-            }
-        ]
+        // members: [
+        //     {
+        //         _id: false,
+        //         user: { type: Schema.Types.ObjectId, ref: 'User'},
+        //         name: { type: String, default: 'admin'}
+        //     }
+        // ]
     },
     {
         timestamps: true
