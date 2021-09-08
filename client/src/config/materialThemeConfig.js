@@ -11,16 +11,17 @@ export const AppTheme = {
     palette: {
         type: 'light',
         primary: {
-            main: '#3670c7'
+            main: '#9750de'
         },
         secondary: {
-            main: '#f0f8ff'
+            main: '#e6d5f7'
         },
         third: {
             main: '#fafafa'
         },
         fourth: {
-            main: '#31343c'
+            main: '#2F2E41'
+            // main: '#31343c'
         }
     },
     spacing: 8,
