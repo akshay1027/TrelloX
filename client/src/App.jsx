@@ -10,8 +10,8 @@ import {
 import setAuthHeader from './utils/authHeader';
 
 const HomeScreen = lazy(() => import('./screens/homeScreen'));
-const RegisterScreen = lazy(() => import('./screens/registerScreen'));
-const LogInScreen = lazy(() => import('./screens/logInscreen'));
+const SignUpScreen = lazy(() => import('./screens/signUpScreen'));
+const SignInScreen = lazy(() => import('./screens/signInscreen'));
 
 if (localStorage.token) {
     setAuthHeader(localStorage.token);
@@ -20,15 +20,15 @@ if (localStorage.token) {
 const App = () => {
     return (
         <Router>
-            <Suspense fallback={<LinearProgress />}>
-                <Switch>
-                    <Route path='/' component={HomeScreen} />
-                    <Route path='/register' component={RegisterScreen} />
-                    <Route path='/signin' component={LogInScreen} />
-                    <Route path='/boards' component={HomeScreen} />
-                    <Route path='/boards/:id' component={HomeScreen} />
-                </Switch>
-            </Suspense>
+            <Switch>
+                <Suspense fallback={<LinearProgress />}>
+                    <Route exact path='/' component={HomeScreen} />
+                    <Route path='/register' component={SignUpScreen} />
+                    <Route path='/login' component={SignInScreen} />
+                    {/* <Route exact path='/boards' component={HomeScreen} />
+                    <Route exact path='/boards/:id' component={HomeScreen} /> */}
+                </Suspense>
+            </Switch>
         </Router>
     );
 };

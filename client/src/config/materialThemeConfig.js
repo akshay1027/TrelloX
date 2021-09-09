@@ -11,7 +11,9 @@ export const AppTheme = {
     palette: {
         type: 'light',
         primary: {
-            main: '#9750de'
+            main: '#9e61ff'
+            // #963aed
+            // #a647ff
         },
         secondary: {
             main: '#e6d5f7'

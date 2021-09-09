@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import { Box, Typography, Container, createStyles, makeStyles, Grid, Button, List, ListItem, ListItemIcon, IconButton } from '@material-ui/core';
-import tutor from '../assests/tutor.svg';
+import prod1 from '../assests/prod1.svg';
 // import HomePageForm from '../components/homePageForm';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import GitHubIcon from '@material-ui/icons/GitHub';
@@ -19,13 +19,34 @@ const useStyles = makeStyles((theme) => {
         button1: {
             backgroundColor: `${theme.palette.primary.main}`,
             marginTop: '20px',
-            padding: '12px 30px',
+            padding: '10px 21px',
             fontWeight: 600,
-            fontSize: '20px'
+            fontSize: '17px',
+            '&:hover': {
+                color: `${theme.palette.primary.main}`,
+                backgroundColor: `${theme.palette.fourth.main}10`
+            }
+        },
+        button2: {
+            backgroundColor: `${theme.palette.primary.main}20`,
+            marginTop: '20px',
+            padding: '10px 21px',
+            fontWeight: 600,
+            fontSize: '17px',
+            border: 'solid 2px #9750de',
+            marginLeft: '20px',
+            color: `${theme.palette.primary.main}`,
+            '&:hover': {
+                color: `${theme.palette.fourth.main}`,
+                backgroundColor: `${theme.palette.fourth.main}10`
+            }
         },
         svg: {
             height: '300px',
-            width: 'auto'
+            width: 'auto',
+            [theme.breakpoints.down('md')]: {
+                marginTop: '50px'
+            }
         },
         icons: {
             color: `${theme.palette.third.main}`,
@@ -51,23 +72,29 @@ const homeScreen = () => {
 
     return (
         <Box width='100%'>
-            <Box py={14}>
+            <Box py={{ xs: 10, md: 14 }}>
                 <Grid container maxWidth='lg' style={{ justifyContent: 'center' }}>
                     <Grid item sm={12} md={5} className={classes.titleBackground} style={{ margin: '0px 10px' }}>
                         <Box py={10} px={2} display="flex" flexDirection='column' alignItems='center' justifyContent='center'>
                             <Typography className='textGradient'>TrelloX</Typography>
                             <Typography style={{ fontWeight: 800, fontSize: '40px', textAlign: 'center', color: '#2F2E41' }}>
-                                {/* <Typography className={classes.textGradient}>TrelloX</Typography> */}
                                 Maximizing Productivity
                             </Typography>
-                            <Button className={classes.button1} size='large' variant='contained'>
-                                SignUp
-                            </Button>
+                            <Box display="flex">
+                                <Button className={classes.button1} size='large' variant='contained'
+                                    onClick={e => history.push('/register')}>
+                                    SignUp
+                                </Button>
+                                <Button className={classes.button2} size='large' variant='contained'
+                                    onClick={e => history.push('/login')}>
+                                    login
+                                </Button>
+                            </Box>
                         </Box>
                     </Grid>
                     <Grid item sm={12} md={6} style={{ display: 'flex', justifyContent: 'center' }}>
                         <Box display='flex' alignItems='center' justifyContent='center'>
-                            <img src={tutor} className={classes.svg} />
+                            <img src={prod1} className={classes.svg} />
                         </Box>
                     </Grid>
                 </Grid>
@@ -79,7 +106,7 @@ const homeScreen = () => {
                 <Grid container maxWidth='lg' style={{ display: 'inline', justifyContent: 'center' }}>
                     <Grid item sm={12} md={12} className={classes.footerBackground}>
                         <Box pt={8} px={2} display="flex" flexDirection='column' alignItems='center' justifyContent='center'>
-                            <Typography style={{ fontSize: '45px', textAlign: 'center' }}>
+                            <Typography style={{ fontSize: '45px', textAlign: 'center', marginRight: '5px' }}>
                                 🤘🏻
                             </Typography>
                         </Box>
@@ -95,7 +122,7 @@ const homeScreen = () => {
                             </IconButton>
                         </Box>
                         <Box pt={3} px={0} display="flex" alignItems='center' justifyContent='center'>
-                            <Typography style={{ fontWeight: 600, fontSize: '20px', color: '#2F2E41' }}>Made With Love By Akshay R R ❤</Typography>
+                            <Typography style={{ fontWeight: 600, fontSize: '20px', color: '7014115' }}>Made With Love By Akshay R R ❤</Typography>
                         </Box>
                         <Box pt={3} px={0} pb={10} display="flex" alignItems='center' justifyContent='center'>
                             <Typography style={{ fontWeight: 600, fontSize: '20px', color: '7014115' }}>Copyright @ AstroLearn 2021</Typography>
