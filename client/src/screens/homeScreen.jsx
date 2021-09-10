@@ -6,6 +6,7 @@ import InstagramIcon from '@material-ui/icons/Instagram';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import { NavLink, useHistory } from 'react-router-dom';
+import isAuthenticated from '../utils/isAuthenticated';
 import '../App.css';
 
 const useStyles = makeStyles((theme) => {
@@ -69,6 +70,10 @@ const homeScreen = () => {
         const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
         if (newWindow) newWindow.opener = null;
     };
+
+    if (localStorage.getItem('trelloToken')) {
+        history.push('/boards');
+    }
 
     return (
         <Box width='100%'>

@@ -17,33 +17,30 @@ const RegisterScreen = ({ match }) => {
 
     const formik = useFormik({
         initialValues: {
-            emailId: '',
-            userName: '',
+            email: '',
+            name: '',
             password: ''
         },
         validateOnChange: true,
         onSubmit: async (values) => {
             try {
-                await api.post(
-                    '/api/businessUser/signup',
+                const res = await api.post(
+                    '/api/auth/signup',
                     values
                 );
+                localStorage.setItem('trelloToken', res.data.token);
+                enqueueSnackbar('Sign Up Successful', { variant: 'success', autoHideDuration: 2000 });
+                history.push('/boards');
             } catch (error) {
-                enqueueSnackbar(error.response.data.message, { variant: 'error', autoHideDuration: 4000 });
-                formik.setStatus(error.response.data.message);
+                enqueueSnackbar(error.response.data.errors.msg, { variant: 'error', autoHideDuration: 4000 });
+                formik.setStatus(error.response.data.errors.msg);
             }
         },
         validate: (values) => {
             formik.setStatus('');
             const errors = {};
 
-            if (values.password?.length <= 6) { errors.password = 'Password length must be greater than 6'; }
-
-            const atposition = values.emailId.trim().indexOf('@');
-            const dotposition = values.emailId.trim().lastIndexOf('.');
-            if (atposition < 1 || dotposition < atposition + 2 || dotposition + 2 >= values.emailId.trim().length) {
-                errors.emailId = 'Please enter a valid email Id';
-            }
+            // if (values.password?.length <= 6) { errors.password = 'Password length must be greater than 6'; }
 
             return errors;
         }
@@ -62,12 +59,12 @@ const RegisterScreen = ({ match }) => {
                             <Box display="flex" flexDirection="column">
                                 <TextField
                                     required
-                                    name="userName"
+                                    name="name"
                                     label="User Name"
                                     onChange={formik.handleChange}
-                                    value={formik.values.userName}
-                                    error={!!formik.errors.userName}
-                                    helperText={formik.errors.userName}
+                                    value={formik.values.name}
+                                    error={!!formik.errors.name}
+                                    helperText={formik.errors.name}
                                     variant="outlined"
                                     style={{ marginBottom: '24px', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)' }}
                                 />
@@ -84,12 +81,12 @@ const RegisterScreen = ({ match }) => {
                                 />
                                 <TextField
                                     required
-                                    name="emailId"
+                                    name="email"
                                     label="Email Id"
                                     onChange={formik.handleChange}
-                                    value={formik.values.emailId}
-                                    error={!!formik.errors.emailId}
-                                    helperText={formik.errors.emailId}
+                                    value={formik.values.email}
+                                    error={!!formik.errors.email}
+                                    helperText={formik.errors.email}
                                     variant="outlined"
                                     style={{ marginBottom: '24px', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)' }}
                                 />

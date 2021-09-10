@@ -8,16 +8,16 @@ const UserModal = require('../models/userModal.js');
 dotenv.config();
 
 // =========> Authenticate user & get token
-const signInUser = async(req, res) => {
+const signInUser = async (req, res) => {
 
     // destructuring request
     const { email, password } = req.body;
 
     try {
-        let user = await UserModal.findOne({email});
+        let user = await UserModal.findOne({ email });
 
         // check if user exists
-        if(!user) {
+        if (!user) {
             return res.status(400).json({ errors: [{ msg: 'Invalid credentials. Try again?' }] });
         }
 
@@ -25,19 +25,19 @@ const signInUser = async(req, res) => {
         const isPasswordMatching = await bcrypt.compare(password, user.password);
         if (!isPasswordMatching) {
             return res.status(400).json({
-            errors: [{ msg: 'Invalid credentials' }],
+                errors: [{ msg: 'Invalid credentials' }],
             });
         }
 
         jwt.sign(
             {
-                user: {id: user.id}
+                user: { id: user.id }
             },
             process.env.JWT_SECRET,
             { expiresIn: 360000 },
             (error, token) => {
-                if(error) throw error;
-                res.json({token});
+                if (error) throw error;
+                res.json({ token });
             }
         );
     } catch (error) {
@@ -47,21 +47,22 @@ const signInUser = async(req, res) => {
 }
 
 // =========> Signup user and get token  
-const signUpUser = async(req, res) => {
+const signUpUser = async (req, res) => {
 
     console.log(req.body);
-    const { email, password, name} = req.body;
+    const { email, password, name } = req.body;
+    console.log(req.body);
 
     try {
         // check if User exists already
-        let isUserExists =  await UserModal.findOne({ email });
+        let isUserExists = await UserModal.findOne({ email });
 
-        if(isUserExists) {
-            return res.status(400).json({ errors: [{ msg: 'User with this Email ID Already Exists'}]})
+        if (isUserExists) {
+            return res.status(400).json({ errors: [{ msg: 'User with this Email ID Already Exists' }] })
         }
 
-        const generateSalt =  await bcrypt.genSalt(10);
-        
+        const generateSalt = await bcrypt.genSalt(10);
+
         // const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
         const hashedPassword = bcrypt.hashSync(password, generateSalt);
 
@@ -77,15 +78,15 @@ const signUpUser = async(req, res) => {
         // Returb new generated token
         jwt.sign(
             {
-              user: {id: newUser.id,},
+                user: { id: newUser.id, },
             },
             process.env.JWT_SECRET,
             { expiresIn: 360000 },
             (error, token) => {
-              if (error) throw error;
-              res.json({ token });
+                if (error) throw error;
+                res.json({ token });
             }
-          );
+        );
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');
@@ -93,7 +94,7 @@ const signUpUser = async(req, res) => {
 }
 
 // =========> Get User Details after logging in
-const getUserDetails = async(req, res) => {
+const getUserDetails = async (req, res) => {
     try {
         const user = await UserModal.findById(req.user.id).select('-password');
         return res.json(user);

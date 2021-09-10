@@ -12,9 +12,11 @@ import setAuthHeader from './utils/authHeader';
 const HomeScreen = lazy(() => import('./screens/homeScreen'));
 const SignUpScreen = lazy(() => import('./screens/signUpScreen'));
 const SignInScreen = lazy(() => import('./screens/signInscreen'));
+const AllBoardsScreen = lazy(() => import('./screens/allBoardsScreen'));
 
-if (localStorage.token) {
-    setAuthHeader(localStorage.token);
+if (localStorage.getItem('trelloToken')) {
+    setAuthHeader(localStorage.getItem('trelloToken'));
+    // console.log(localStorage.getItem('trelloToken'));
 }
 
 const App = () => {
@@ -25,8 +27,8 @@ const App = () => {
                     <Route exact path='/' component={HomeScreen} />
                     <Route path='/register' component={SignUpScreen} />
                     <Route path='/login' component={SignInScreen} />
-                    {/* <Route exact path='/boards' component={HomeScreen} />
-                    <Route exact path='/boards/:id' component={HomeScreen} /> */}
+                    <Route path='/boards' component={AllBoardsScreen} />
+                    {/* <Route exact path='/boards/:id' component={HomeScreen} /> */}
                 </Suspense>
             </Switch>
         </Router>

@@ -24,10 +24,13 @@ const SignInScreen = ({ match }) => {
         validateOnChange: true,
         onSubmit: async (values) => {
             try {
-                await api.post(
-                    '/api/businessUser/signup',
+                const res = await api.post(
+                    '/api/auth/signup',
                     values
                 );
+                localStorage.setItem('trelloToken', res.data.token);
+                enqueueSnackbar('Sign Up Successful', { variant: 'success', autoHideDuration: 2000 });
+                history.push('/boards');
             } catch (error) {
                 enqueueSnackbar(error.response.data.message, { variant: 'error', autoHideDuration: 4000 });
                 formik.setStatus(error.response.data.message);
@@ -37,13 +40,13 @@ const SignInScreen = ({ match }) => {
             formik.setStatus('');
             const errors = {};
 
-            if (values.password?.length <= 6) { errors.password = 'Password length must be greater than 6'; }
+            if (values.password?.length <= 5) { errors.password = 'Password length must be greater than of equal to 6'; }
 
-            const atposition = values.emailId.trim().indexOf('@');
-            const dotposition = values.emailId.trim().lastIndexOf('.');
-            if (atposition < 1 || dotposition < atposition + 2 || dotposition + 2 >= values.emailId.trim().length) {
-                errors.emailId = 'Please enter a valid email Id';
-            }
+            // const atposition = values.emailId.trim().indexOf('@');
+            // const dotposition = values.emailId.trim().lastIndexOf('.');
+            // if (atposition < 1 || dotposition < atposition + 2 || dotposition + 2 >= values.emailId.trim().length) {
+            //     errors.emailId = 'Please enter a valid email Id';
+            // }
 
             return errors;
         }
