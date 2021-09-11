@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import {
     AppBar, IconButton, Toolbar, Typography,
     createStyles, makeStyles,
-    Box, Drawer
+    Box, Drawer, Tooltip
 } from '@material-ui/core';
 
 // import MainDrawerContent from './mainDrawerContent';
 
 import MenuIcon from '@material-ui/icons/Menu';
-import Brightness5Icon from '@material-ui/icons/Brightness5';
-import Brightness4Icon from '@material-ui/icons/Brightness4';
+import HomeIcon from '@material-ui/icons/Home';
+// import Brightness5Icon from '@material-ui/icons/Brightness5';
+// import Brightness4Icon from '@material-ui/icons/Brightness4';
 
 export const mainDrawerWidth = 280;
 
@@ -69,12 +70,19 @@ const MainAppBar = () => {
             <AppBar position="sticky" className={classes.appBar}>
                 <Toolbar>
                     <Box display="flex" alignItems='center' justifyContent='space-between' style={{ width: '100%', height: '100%' }}>
-                        <Typography style={{ fontWeight: 700, fontSize: '27px' }} >
+                        <Tooltip title='Home'>
+                            <IconButton edge="start" color="inherit" aria-label="home">
+                                <HomeIcon style={{ fontSize: '27px' }} />
+                            </IconButton>
+                        </Tooltip>
+                        <Typography style={{ fontWeight: 700, fontSize: '25px', marginRight: '5px' }} >
                             TrelloX
                         </Typography>
-                        <IconButton edge="start" color="inherit" aria-label="menu" onClick={(e) => setIsOpen(!isOpen)}>
-                            <MenuIcon style={{ fontSize: '32px' }} />
-                        </IconButton>
+                        <Tooltip title='Logout'>
+                            <IconButton edge="start" color="inherit" aria-label="menu" onClick={(e) => setIsOpen(!isOpen)}>
+                                <MenuIcon style={{ fontSize: '27px' }} />
+                            </IconButton>
+                        </Tooltip>
                         {/* <IconButton edge="start" color="inherit" aria-label="dark theme" onClick={(e) => setIsDarkmode(!isDarkmode)}>
                         {isDarkmode ? <Brightness5Icon /> : <Brightness4Icon />}
                     </IconButton> */}

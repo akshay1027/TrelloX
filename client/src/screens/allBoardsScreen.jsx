@@ -8,6 +8,7 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import { NavLink, useHistory } from 'react-router-dom';
 
 const Navbar = lazy(() => import('../components/navbar'));
+const NewBoard = lazy(() => import('../components/newBoard'));
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -46,16 +47,39 @@ const useStyles = makeStyles((theme) => {
             },
             fontSize: '40px',
             margin: '0px 10px'
+        },
+        boards: {
+            backgroundColor: `${theme.palette.primary.main}10.`,
+            padding: '10px',
+            height: '130px',
+            width: '240px',
+            margin: '30px 30px',
+            borderRadius: '5px',
+            boxShadow: '3px 4px 10px 0px rgb(159 123 206 / 61%)',
+            borderBottom: `10px solid ${theme.palette.primary.main}99`,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center'
         }
     });
 }
 );
 
 const allBoardsScreen = () => {
+    const classes = useStyles();
     return (
         <>
             <Navbar />
-            <Typography variant='h2'>All Boards</Typography>
+            <Box style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                {/* <Box className={classes.boards}>
+                    <Typography variant='body1' style={{ fontWeight: 600, letterSpacing: '-0.5px' }}>Add New Board</Typography>
+                </Box> */}
+                <NewBoard />
+                <Box className={classes.boards}>
+                    <Typography style={{ fontWeight: 600, letterSpacing: '-0.5px' }}>Add New Board brrroo wtf broooooooooooo</Typography>
+                </Box>
+            </Box>
         </>
     );
 };
