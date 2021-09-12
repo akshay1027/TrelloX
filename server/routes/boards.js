@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { 
+const {
     addNewBoard,
     allBoards,
     getBoardById,
@@ -11,17 +11,17 @@ const {
 // Middleware to check if user is Authenticated
 const { authenticatedUser } = require('../middlewares/authorization/authenticatedUser');
 
-const { 
+const {
     addNewBoardValidation,
     boardIdValidation,
-    updateBoardTitleValidation 
+    updateBoardTitleValidation
 } = require('../middlewares/validators/boardValidation');
 
 const router = express.Router();
 
-router.post('/newBoard', authenticatedUser, addNewBoardValidation, addNewBoard );
+router.post('/newBoard', authenticatedUser, addNewBoardValidation, addNewBoard);
 
-router.get('/allBoards', authenticatedUser, allBoards );
+router.get('/allBoards', authenticatedUser, allBoards);
 
 router.get('/:boardId', authenticatedUser, boardIdValidation, getBoardById);
 

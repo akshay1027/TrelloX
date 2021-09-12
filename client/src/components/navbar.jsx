@@ -42,8 +42,6 @@ const useStyles = makeStyles((theme) =>
 
 const MainAppBar = () => {
     const classes = useStyles();
-    let darkThemeLocalStorage;
-    const [isDarkmode, setIsDarkmode] = useState();
     const [isOpen, setIsOpen] = useState(false);
 
     // Function to set darkmode to local storage

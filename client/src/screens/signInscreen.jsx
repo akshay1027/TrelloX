@@ -1,7 +1,7 @@
-import { Box, Button, Container, TextField, Typography, Checkbox } from '@material-ui/core';
+import { Box, Button, Container, TextField, Typography } from '@material-ui/core';
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 import api from '../config/axiosConfig';
 import { useFormik } from 'formik';
@@ -9,8 +9,9 @@ import { useSnackbar } from 'notistack';
 
 import Auth from '../assests/auth.svg';
 
-const SignInScreen = ({ match }) => {
+const SignInScreen = () => {
     const { enqueueSnackbar } = useSnackbar();
+    const history = useHistory();
 
     // const [check, setCheck] = useState(false);
     // const [checkError, setCheckError] = useState('');
@@ -94,7 +95,7 @@ const SignInScreen = ({ match }) => {
                     }
                 </Box>
                 <span style={{ marginTop: '16px', alignSelf: 'center', fontSize: '16px' }}>
-                    Dont have an account ? <Link to="/signup" style={{ color: '#9e61ff', fontSize: '18px', fontWeight: 600 }}> SignUp </Link>
+                    Dont have an account ? <Link to="/register" style={{ color: '#9e61ff', fontSize: '18px', fontWeight: 600 }}> SignUp </Link>
                 </span>
             </Box>
         </Container>

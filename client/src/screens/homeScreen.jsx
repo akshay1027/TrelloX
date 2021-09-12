@@ -1,12 +1,11 @@
-import React, { lazy } from 'react';
-import { Box, Typography, Container, createStyles, makeStyles, Grid, Button, List, ListItem, ListItemIcon, IconButton } from '@material-ui/core';
+import React from 'react';
+import { Box, Typography, createStyles, makeStyles, Grid, Button, IconButton } from '@material-ui/core';
 import prod1 from '../assests/prod1.svg';
 // import HomePageForm from '../components/homePageForm';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
-import { NavLink, useHistory } from 'react-router-dom';
-import isAuthenticated from '../utils/isAuthenticated';
+import { useHistory } from 'react-router-dom';
 import '../App.css';
 
 const useStyles = makeStyles((theme) => {
