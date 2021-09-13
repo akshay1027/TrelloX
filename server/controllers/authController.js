@@ -15,7 +15,7 @@ const signInUser = async (req, res) => {
 
     try {
         let user = await UserModal.findOne({ email });
-        const name = user.name;
+
         // check if user exists
         if (!user) {
             return res.status(400).json({ errors: [{ msg: 'Invalid credentials. Try again?' }] });
@@ -37,7 +37,7 @@ const signInUser = async (req, res) => {
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                res.status(200).json({ token, name });
+                res.json({ token });
             }
         );
     } catch (error) {

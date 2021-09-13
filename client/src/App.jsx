@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Switch, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import {
     Box, LinearProgress,
     createStyles, makeStyles,
@@ -14,19 +14,11 @@ const SignUpScreen = lazy(() => import('./screens/signUpScreen'));
 const SignInScreen = lazy(() => import('./screens/signInscreen'));
 const AllBoardsScreen = lazy(() => import('./screens/allBoardsScreen'));
 
-// if (localStorage.trelloToken) {
-//     setAuthHeader(localStorage.trelloToken);
-// }
+if (localStorage.trelloToken) {
+    setAuthHeader(localStorage.trelloToken);
+}
 
 const App = () => {
-    // const location = useLocation();
-
-    useEffect(() => {
-        if (localStorage.getItem('trelloToken')) {
-            // console.log(localStorage.getItem('trelloToken'));
-            setAuthHeader(localStorage.getItem('trelloToken'));
-        }
-    });
     return (
         <Router>
             <Switch>

@@ -52,11 +52,10 @@ exports.allBoards = async (req, res) => {
            so we use this Id to get all details about the board from BoardModal
         */
         for (const boardId of user.boards) {
-            const boardData = await BoardModal.findById(boardId);
+            boardData = await BoardModal.findById(boardId);
             allBoards.push(boardData);
         }
 
-        console.log(allBoards);
         res.status(200).json(allBoards);
     } catch (error) {
         console.error(error.message);

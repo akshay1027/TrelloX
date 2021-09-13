@@ -1,7 +1,7 @@
 import { Box, Button, Container, TextField, Typography } from '@material-ui/core';
 
 import React from 'react';
-import { Link, useHistory, Redirect } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import api from '../config/axiosConfig';
 import { useFormik } from 'formik';
@@ -27,9 +27,8 @@ const RegisterScreen = ({ match }) => {
                     values
                 );
                 localStorage.setItem('trelloToken', res.data.token);
-                localStorage.setItem('name', values.name);
                 enqueueSnackbar('Sign Up Successful', { variant: 'success', autoHideDuration: 2000 });
-                <Redirect to='/boards' />;
+                history.push('/boards');
             } catch (error) {
                 enqueueSnackbar(error.response.data.errors.msg, { variant: 'error', autoHideDuration: 4000 });
                 formik.setStatus(error.response.data.errors.msg);
