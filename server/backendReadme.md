@@ -1,4 +1,4 @@
-### Architecture: Modal, Routes, Controller & Middleware
+ ### Architecture: Modal, Routes, Controller & Middleware
 
 ### SignIn logic:
 1) Get email and password from request. Validate the request body.
