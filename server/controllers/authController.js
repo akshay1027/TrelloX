@@ -15,6 +15,7 @@ const signInUser = async (req, res) => {
 
     try {
         let user = await UserModal.findOne({ email });
+        const name = user.name;
 
         // check if user exists
         if (!user) {
@@ -37,7 +38,7 @@ const signInUser = async (req, res) => {
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                res.json({ token });
+                res.json({ token, name });
             }
         );
     } catch (error) {

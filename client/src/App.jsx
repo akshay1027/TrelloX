@@ -14,11 +14,16 @@ const SignUpScreen = lazy(() => import('./screens/signUpScreen'));
 const SignInScreen = lazy(() => import('./screens/signInscreen'));
 const AllBoardsScreen = lazy(() => import('./screens/allBoardsScreen'));
 
-if (localStorage.trelloToken) {
-    setAuthHeader(localStorage.trelloToken);
-}
+// if (localStorage.trelloToken) {
+//     setAuthHeader(localStorage.trelloToken);
+// }
 
 const App = () => {
+    useEffect(() => {
+        if (localStorage.getItem('trelloToken')) {
+            setAuthHeader(localStorage.getItem('trelloToken'));
+        }
+    });
     return (
         <Router>
             <Switch>

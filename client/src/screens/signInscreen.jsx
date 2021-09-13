@@ -18,19 +18,19 @@ const SignInScreen = () => {
 
     const formik = useFormik({
         initialValues: {
-            emailId: '',
-            userName: '',
+            email: '',
             password: ''
         },
         validateOnChange: true,
         onSubmit: async (values) => {
             try {
                 const res = await api.post(
-                    '/api/auth/signup',
+                    '/api/auth/signin',
                     values
                 );
                 localStorage.setItem('trelloToken', res.data.token);
-                enqueueSnackbar('Sign Up Successful', { variant: 'success', autoHideDuration: 2000 });
+                localStorage.setItem('name', res.data.name);
+                enqueueSnackbar('Sign In Successful', { variant: 'success', autoHideDuration: 2000 });
                 history.push('/boards');
             } catch (error) {
                 enqueueSnackbar(error.response.data.message, { variant: 'error', autoHideDuration: 4000 });
@@ -66,12 +66,12 @@ const SignInScreen = () => {
                             <Box display="flex" flexDirection="column">
                                 <TextField
                                     required
-                                    name="userName"
-                                    label="User Name"
+                                    name="email"
+                                    label="Email Id"
                                     onChange={formik.handleChange}
-                                    value={formik.values.userName}
-                                    error={!!formik.errors.userName}
-                                    helperText={formik.errors.userName}
+                                    value={formik.values.email}
+                                    error={!!formik.errors.email}
+                                    helperText={formik.errors.email}
                                     variant="outlined"
                                     style={{ marginBottom: '24px', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)' }}
                                 />
@@ -88,7 +88,7 @@ const SignInScreen = () => {
                                 />
                                 <Button type='submit' size="large" variant="contained" color="primary"
                                     style={{ width: '100%', padding: '12px', boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)' }} >
-                                    Sign UP
+                                    Sign In
                                 </Button>
                             </Box>
                         </form>
