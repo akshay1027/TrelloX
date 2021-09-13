@@ -98,6 +98,8 @@ exports.updateListTitle = async(req, res) => {
         List1 is moved to List2 === Index of list1 changed from 1 -> 2 && list2 is moved from 2 -> 1
 */
 
+// splice(startIndex, remove, addItemsAfterRemovingFromStartIndex)
+
 // Move List 
 exports.moveList = async(req, res) => {
     try {  

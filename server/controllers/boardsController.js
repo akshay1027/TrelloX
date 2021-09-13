@@ -10,10 +10,11 @@ exports.addNewBoard = async (req, res) => {
 
     // // console.log(req);
     // console.log(req.user.id);
-    
+    console.log(req.body);
+
     try {
         // Create and Save board to database
-        const newBoard = new BoardModal({boardTitle});
+        const newBoard = new BoardModal({ boardTitle });
         const newBoardCreated = await newBoard.save();
 
         // console.log(' new board created, title = ', newBoardCreated);
@@ -23,12 +24,12 @@ exports.addNewBoard = async (req, res) => {
         user.boards.unshift(newBoardCreated.id); // add new board to user, unshift is an array method
         await user.save();
         // console.log(' User modal = ', user);
-        
+
         // Add new activity in board, refer BoardModal for more clarification
-        newBoardCreated.activity.unshift({text: `${user.name} created a board named ${boardTitle}`});
+        newBoardCreated.activity.unshift({ text: `${user.name} created a board named ${boardTitle}` });
         await newBoardCreated.save();
         // console.log(' Board modal = ', newBoardCreated);
-        
+
         res.status(200).json(newBoardCreated);
     } catch (error) {
         console.error(error.message);
@@ -37,7 +38,7 @@ exports.addNewBoard = async (req, res) => {
 }
 
 // Get All Boards
-exports.allBoards = async(req, res) => {
+exports.allBoards = async (req, res) => {
 
     const userId = req.user.id;
     console.log(userId)
@@ -49,13 +50,13 @@ exports.allBoards = async(req, res) => {
         const allBoards = [];
         /* UserModal.boards returns board Ids.
            so we use this Id to get all details about the board from BoardModal
-        */ 
-        for(const boardId of user.boards) {
-            boardData = await BoardModal.findById(boardId);
+        */
+        for (const boardId of user.boards) {
+            const boardData = await BoardModal.findById(boardId);
             allBoards.push(boardData);
         }
 
-        res.status(400).json(allBoards);
+        res.status(200).json(allBoards);
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');
@@ -74,15 +75,15 @@ exports.allBoards = async(req, res) => {
 */
 
 // Get a board by id
-exports.getBoardById = async(req, res) => {
+exports.getBoardById = async (req, res) => {
 
     const boardId = req.params.boardId;
 
     try {
         const boardData = await BoardModal.findById(boardId);
 
-        if(!boardData) {
-            return res.status(404).json({msg: 'Requested board not found'});
+        if (!boardData) {
+            return res.status(404).json({ msg: 'Requested board not found' });
         }
 
         res.status(200).json(boardData);
@@ -93,7 +94,7 @@ exports.getBoardById = async(req, res) => {
 }
 
 // Change boardTitle
-exports.updateBoardTitle = async(req, res) => {
+exports.updateBoardTitle = async (req, res) => {
 
     const boardId = req.params.boardId;
     const newBoardTitle = req.body.boardTitle;
@@ -101,15 +102,15 @@ exports.updateBoardTitle = async(req, res) => {
     try {
         const boardData = await BoardModal.findById(boardId);
 
-        if(!boardData) {
-            return res.status(404).json({msg: 'Requested board not found'});
+        if (!boardData) {
+            return res.status(404).json({ msg: 'Requested board not found' });
         }
-        
-        if(newBoardTitle !== boardData.boardTitle) {
+
+        if (newBoardTitle !== boardData.boardTitle) {
             // update old board title with new one.
             oldBoardTitle = boardData.boardTitle;
             boardData.boardTitle = newBoardTitle;
-            boardData.activity.unshift({text: `Renamed board (from ${oldBoardTitle})`});
+            boardData.activity.unshift({ text: `Renamed board (from ${oldBoardTitle})` });
             await boardData.save();
         }
 
@@ -130,10 +131,10 @@ exports.getBoardActivity = async (req, res) => {
         if (!board) {
             return res.status(404).json({ msg: 'Board not found' });
         }
-    
+
         res.json(boardData.activity);
     } catch (err) {
         console.error(error.message);
         res.status(500).send('Internal server error');
     }
-  };
+};
