@@ -1,7 +1,7 @@
 import React, { lazy, useEffect, useState } from 'react';
-import { Box, Typography, createStyles, makeStyles, Grid, Button, IconButton, CircularProgress, Modal, TextField } from '@material-ui/core';
+import { Box, Typography, createStyles, makeStyles, Grid, Button, IconButton, CircularProgress, Modal, TextField, Container } from '@material-ui/core';
 
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
 
@@ -9,7 +9,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 
 import api from '../config/axiosConfig';
-import { useAppSelector } from '../redux/store';
+import axios from 'axios';
+
+import setAuthHeader from '../utils/authHeader';
 
 const Navbar = lazy(() => import('../components/navbar'));
 const NewBoard = lazy(() => import('../components/newBoard'));
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme) => {
             margin: '30px 30px',
             borderRadius: '5px',
             boxShadow: '3px 4px 10px 0px rgb(159 123 206 / 61%)',
-            borderBottom: `10px solid ${theme.palette.primary.main}99`,
+            borderBottom: `10px solid ${theme.palette.fourth.main}99`,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -52,7 +54,7 @@ const useStyles = makeStyles((theme) => {
         paper: {
             // display: 'flex',
             // flexDirection: 'column',
-            width: '400',
+            width: '400px',
             position: 'absolute',
             left: '50%',
             transform: 'translateX(-50%)',
@@ -68,11 +70,17 @@ const useStyles = makeStyles((theme) => {
             border: '2px solid #000',
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3)
+        },
+        navLink: {
+            display: 'flex',
+            color: 'inherit',
+            textDecoration: 'none'
         }
     });
 }
 );
 
+// 1) Add New Board + 2) All Boards
 const allBoardsScreen = () => {
     const classes = useStyles();
     const history = useHistory();
@@ -80,26 +88,40 @@ const allBoardsScreen = () => {
 
     const [allBoards, setAllBoards] = useState([]);
     const [open, setOpen] = useState(false);
+    const [createdBoard, setCreatedBoard] = useState(false);
 
-    if (!localStorage.getItem('trelloToken')) {
-        history.push('/');
-    }
+    const userName = localStorage.getItem('name') ? localStorage.getItem('name') : 'user';
+    // if user not authenticated, return to home screen
+    const token = localStorage.trelloToken;
+    useEffect(() => {
+        if (localStorage.trelloToken) {
+            setAuthHeader(localStorage.trelloToken);
+        } else {
+            history.push('/');
+        }
+    });
 
-    const fetchAllBords = async () => {
+    // Fetch all boards
+    const fetchAllBoards = async () => {
         try {
-            const res = await api.get(
-                '/api/boards/allBoards'
+            // axios.defaults.headers.common['auth-token'] = token;
+            const res = await api.get('/api/boards/allBoards',
+                {
+                    headers: {
+                        'auth-token': token
+                    }
+                }
             );
             setAllBoards(res.data);
             console.log(res.data);
             // enqueueSnackbar('Sign Up Successful', { variant: 'success', autoHideDuration: 2000 });
             // history.push('/boards');
         } catch (error) {
-            enqueueSnackbar('Some error occured, Try again?', { variant: 'error', autoHideDuration: 3000 });
-            // formik.setStatus(error.response.data.errors.msg);
+            enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
         }
     };
 
+    // New board api call
     const formik = useFormik({
         initialValues: {
             boardTitle: ''
@@ -107,11 +129,16 @@ const allBoardsScreen = () => {
         validateOnChange: true,
         onSubmit: async (values) => {
             try {
-                const res = await api.post(
-                    '/api/boards/newBoard',
-                    values
+                const res = await api.post('/api/boards/newBoard',
+                    values,
+                    {
+                        headers: {
+                            'auth-token': token
+                        }
+                    }
                 );
                 setOpen(!open);
+                setCreatedBoard(!createdBoard);
                 enqueueSnackbar('Board Created Successfully', { variant: 'success', autoHideDuration: 2000 });
             } catch (error) {
                 enqueueSnackbar(error.response.data.errors.msg, { variant: 'error', autoHideDuration: 4000 });
@@ -128,18 +155,25 @@ const allBoardsScreen = () => {
     });
 
     useEffect(() => {
-        fetchAllBords();
-    }, [open]);
+        fetchAllBoards();
+    }, [createdBoard]);
 
+    // Add new board component
     const newBoard = () => {
         return (
             <>
-                <Box className={classes.newBoard} onClick={() => setOpen(true)}>
-                    <AddIcon style={{ fontSize: '40px', paddingBottom: '10px' }} />
-                    <Box>
-                        Create New Board
+                <Box style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <Typography variant='h4' style={{ marginTop: '50px', color: '#2F2E41', fontWeight: 600 }}>
+                        Hello {userName} 👋
+                    </Typography >
+                    <Box className={classes.newBoard} onClick={() => setOpen(true)}>
+                        <AddIcon style={{ fontSize: '50px', marginBottom: '10px', background: '#e6e6e6', borderRadius: '27px', color: '#2F2E41' }} />
+                        <Typography variant='subtitle1'>
+                            Create New Board
+                        </Typography >
                     </Box>
-                </Box><Modal open={open} onClose={() => setOpen(false)}>
+                </Box>
+                <Modal open={open} onClose={() => setOpen(false)}>
                     <Box className={classes.paper}>
                         <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <h1>Create New Board</h1>
@@ -173,25 +207,29 @@ const allBoardsScreen = () => {
     return (
         <>
             <Navbar />
-            <Box style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+            <Box>
                 {newBoard}
             </Box>
 
-            <Box style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
-                {
-                    allBoards === undefined
-                        ? <CircularProgress />
-                        : allBoards.map((board, i) => {
-                            return (
-                                <>
-                                    <Box className={classes.boards} key={i}>
-                                        <Typography style={{ letterSpacing: '-0.5px' }}>{board.boardTitle}</Typography>
-                                    </Box>
-                                </>
-                            );
-                        })
-                }
-            </Box>
+            <Container maxWidth='lg'>
+                <Box style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                    {
+                        allBoards === undefined
+                            ? <CircularProgress />
+                            : allBoards.map((board, i) => {
+                                return (
+                                    <>
+                                        <NavLink to={`/boards/${board._id}`} className={classes.navLink} >
+                                            <Box className={classes.boards} key={i}>
+                                                <Typography variant='subtitle1' style={{ letterSpacing: '-0.5px' }}>{board.boardTitle}</Typography>
+                                            </Box>
+                                        </NavLink>
+                                    </>
+                                );
+                            })
+                    }
+                </Box>
+            </Container>
         </>
     );
 };
