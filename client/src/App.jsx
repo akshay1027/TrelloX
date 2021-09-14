@@ -8,11 +8,13 @@ import {
 } from '@material-ui/core';
 
 import setAuthHeader from './utils/authHeader';
+// import individualBoard from './screens/individualBoard';
 
 const HomeScreen = lazy(() => import('./screens/homeScreen'));
 const SignUpScreen = lazy(() => import('./screens/signUpScreen'));
 const SignInScreen = lazy(() => import('./screens/signInscreen'));
 const AllBoardsScreen = lazy(() => import('./screens/allBoardsScreen'));
+const IndividualBoard = lazy(() => import('./screens/individualBoard'));
 
 // if (localStorage.trelloToken) {
 //     setAuthHeader(localStorage.trelloToken);
@@ -32,7 +34,7 @@ const App = () => {
                     <Route path='/register' component={SignUpScreen} />
                     <Route path='/login' component={SignInScreen} />
                     <Route path='/boards' component={AllBoardsScreen} />
-                    {/* <Route exact path='/boards/:id' component={HomeScreen} /> */}
+                    <Route exact path='/board/:id' component={IndividualBoard} />
                 </Suspense>
             </Switch>
         </Router>

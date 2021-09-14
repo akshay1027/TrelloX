@@ -13,6 +13,8 @@ import axios from 'axios';
 
 import setAuthHeader from '../utils/authHeader';
 
+import '../App.css';
+
 const Navbar = lazy(() => import('../components/navbar'));
 const NewBoard = lazy(() => import('../components/newBoard'));
 
@@ -30,7 +32,10 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
+            '&:hover': {
+                backgroundColor: `${theme.palette.primary.main}23`
+            }
         },
         newBoard: {
             backgroundColor: `${theme.palette.primary.main}10`,
@@ -130,7 +135,7 @@ const allBoardsScreen = () => {
         validateOnChange: true,
         onSubmit: async (values) => {
             try {
-                const res = await api.post('/api/boards/newBoard',
+                await api.post('/api/boards/newBoard',
                     values,
                     {
                         headers: {
@@ -207,7 +212,7 @@ const allBoardsScreen = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar onlyHome={false} />
             <Box>
                 {newBoard}
             </Box>
@@ -220,7 +225,7 @@ const allBoardsScreen = () => {
                             : allBoards.map((board, i) => {
                                 return (
                                     <>
-                                        <NavLink to={`/boards/${board._id}`} className={classes.navLink} >
+                                        <NavLink to={`/board/${board._id}`} className={classes.navLink}>
                                             <Box className={classes.boards} key={i}>
                                                 <Typography variant='subtitle1' style={{ letterSpacing: '-0.5px' }}>{board.boardTitle}</Typography>
                                             </Box>

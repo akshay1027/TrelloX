@@ -14,3 +14,8 @@
         SOL: Send header explicitely in every request. 
          note: get request, headers first.
                post request, headers last.
+
+
+### Redux Toolkit
+
+    Component -> make API call -> Call Dispatch -> Store payload in global state -> Make a function to send this data -> Access it using UseAppSelector
