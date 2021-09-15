@@ -19,3 +19,7 @@
 ### Redux Toolkit
 
     Component -> make API call -> Call Dispatch -> Store payload in global state -> Make a function to send this data -> Access it using UseAppSelector
+
+### Explore and Optimisation
+1) RTK query
+2) 

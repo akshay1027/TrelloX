@@ -16,7 +16,6 @@ import setAuthHeader from '../utils/authHeader';
 import '../App.css';
 
 const Navbar = lazy(() => import('../components/navbar'));
-const NewBoard = lazy(() => import('../components/newBoard'));
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -147,8 +146,7 @@ const allBoardsScreen = () => {
                 setCreatedBoard(!createdBoard);
                 enqueueSnackbar('Board Created Successfully', { variant: 'success', autoHideDuration: 2000 });
             } catch (error) {
-                enqueueSnackbar(error.response.data.errors.msg, { variant: 'error', autoHideDuration: 4000 });
-                formik.setStatus(error.response.data.errors.msg);
+                enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
             }
         },
         validate: (values) => {
@@ -212,7 +210,7 @@ const allBoardsScreen = () => {
 
     return (
         <>
-            <Navbar onlyHome={false} />
+            <Navbar isBoard={false} />
             <Box>
                 {newBoard}
             </Box>

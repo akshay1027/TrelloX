@@ -1,6 +1,8 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Box, Typography, LinearProgress, Button, makeStyles, createStyles, Modal, TextField, IconButton } from '@material-ui/core';
 
+import Navbar from '../components/navbar';
+
 import { NavLink, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
@@ -72,10 +74,13 @@ const useStyles = makeStyles((theme) => {
 );
 
 const individualBoard = (props) => {
+    const boardId = props.match.params.boardId;
+    const { enqueueSnackbar } = useSnackbar();
+
     return (
-        <div>
-            Hello
-        </div>
+        <>
+            <Navbar isBoard={true} />
+        </>
     );
 };
 

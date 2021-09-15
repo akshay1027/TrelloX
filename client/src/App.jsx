@@ -34,7 +34,7 @@ const App = () => {
                     <Route path='/register' component={SignUpScreen} />
                     <Route path='/login' component={SignInScreen} />
                     <Route path='/boards' component={AllBoardsScreen} />
-                    <Route exact path='/board/:id' component={IndividualBoard} />
+                    <Route exact path='/board/:boardId' component={IndividualBoard} />
                 </Suspense>
             </Switch>
         </Router>
