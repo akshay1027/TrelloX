@@ -7,6 +7,8 @@ import { NavLink, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
 
+import '../App.css';
+
 import api from '../config/axiosConfig';
 
 const useStyles = makeStyles((theme) => {
@@ -78,9 +80,9 @@ const individualBoard = (props) => {
     const { enqueueSnackbar } = useSnackbar();
 
     return (
-        <>
+        <div className='bgImage'>
             <Navbar isBoard={true} />
-        </>
+        </div >
     );
 };
 

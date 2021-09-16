@@ -4,16 +4,16 @@ import {
 } from '@material-ui/core';
 
 import React, { useEffect, useState } from 'react';
-import { NavLink, useLocation, useParams } from 'react-router-dom';
-import PersonIcon from '@material-ui/icons/Person';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import FlareIcon from '@material-ui/icons/Flare';
-import HomeIcon from '@material-ui/icons/Home';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import HowToRegIcon from '@material-ui/icons/HowToReg';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import { NavLink, useLocation, useParams, useHistory } from 'react-router-dom';
+// import PersonIcon from '@material-ui/icons/Person';
+// import DashboardIcon from '@material-ui/icons/Dashboard';
+// import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+// import FlareIcon from '@material-ui/icons/Flare';
+// import HomeIcon from '@material-ui/icons/Home';
+// import VpnKeyIcon from '@material-ui/icons/VpnKey';
+// import HowToRegIcon from '@material-ui/icons/HowToReg';
+// import LockOpenIcon from '@material-ui/icons/LockOpen';
+// import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import api from '../config/axiosConfig';
 
 import Moment from 'react-moment';
@@ -24,7 +24,16 @@ import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
-        toolbar: theme.mixins.toolbar
+        toolbar: theme.mixins.toolbar,
+        button: {
+            backgroundColor: '#ed4779',
+            color: '#f5f5f5',
+            marginTop: '1px',
+            '&:hover': {
+                cursor: 'pointer',
+                backgroundColor: '#f7346f'
+            }
+        }
     });
 }
 );
@@ -32,7 +41,7 @@ const useStyles = makeStyles((theme) => {
 const MainDrawerContent = ({ isOpen, setIsOpen }) => {
     // const boardId = props.match.params.boardId;
     const { boardId } = useParams();
-
+    const history = useHistory();
     const { enqueueSnackbar } = useSnackbar();
     const classes = useStyles();
     const [activity, setActivity] = useState([]);
@@ -52,12 +61,27 @@ const MainDrawerContent = ({ isOpen, setIsOpen }) => {
             enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
         }
     };
+
+    const logout = async () => {
+        localStorage.clear();
+        enqueueSnackbar('Logged out, sign in again?', { variant: 'success', autoHideDuration: 3000 });
+        history.push('/');
+    };
     useEffect(() => {
         fetchActivity();
     }, []);
     return (
         <Box>
             <div className={classes.toolbar} />
+            <Button
+                color='primary'
+                fullWidth
+                variant='contained'
+                className={classes.button}
+                onClick={() => logout()}
+            >
+                Logout
+            </Button>
             <Divider />
             <Box style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
                 <Typography style={{ fontSize: '23px', fontWeight: 600 }}>Activity</Typography>
@@ -84,12 +108,12 @@ const MainDrawerContent = ({ isOpen, setIsOpen }) => {
                         </List>
                     );
                 })}
-            <Box style={{ display: 'flex', flexDirection: 'column' }}>
+            <Box>
                 <Button
                     color='primary'
                     fullWidth
                     variant='contained'
-                    className={classes.button}
+                    // className={classes.button}
                     disabled={activityLists * 5 > activity.length}
                     onClick={() => setActivityLists(activityLists + 1)}
                 >

@@ -1,14 +1,12 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import {
-    Box, LinearProgress,
-    createStyles, makeStyles,
-    Theme
+    LinearProgress
 } from '@material-ui/core';
 
+// Set jwt toke to header
 import setAuthHeader from './utils/authHeader';
-// import individualBoard from './screens/individualBoard';
 
 const HomeScreen = lazy(() => import('./screens/homeScreen'));
 const SignUpScreen = lazy(() => import('./screens/signUpScreen'));

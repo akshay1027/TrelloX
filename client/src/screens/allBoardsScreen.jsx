@@ -20,7 +20,8 @@ const Navbar = lazy(() => import('../components/navbar'));
 const useStyles = makeStyles((theme) => {
     return createStyles({
         boards: {
-            backgroundColor: `${theme.palette.primary.main}10.`,
+            backgroundColor: `${theme.palette.fourth.main}`,
+            color: '#f5f5f5',
             padding: '10px',
             height: '130px',
             width: '240px',
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => {
             }
         },
         newBoard: {
-            backgroundColor: `${theme.palette.primary.main}10`,
+            // backgroundColor: `${theme.palette.primary.main}10`,
             padding: '10px',
             height: '130px',
             width: '240px',
@@ -119,8 +120,6 @@ const allBoardsScreen = () => {
             );
             setAllBoards(res.data);
             console.log(res.data);
-            // enqueueSnackbar('Sign Up Successful', { variant: 'success', autoHideDuration: 2000 });
-            // history.push('/boards');
         } catch (error) {
             enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
         }
@@ -209,7 +208,7 @@ const allBoardsScreen = () => {
     };
 
     return (
-        <>
+        <div className='boardsBgImage'>
             <Navbar isBoard={false} />
             <Box>
                 {newBoard}
@@ -234,7 +233,7 @@ const allBoardsScreen = () => {
                     }
                 </Box>
             </Container>
-        </>
+        </div>
     );
 };
 
