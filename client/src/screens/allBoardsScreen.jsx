@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => {
             margin: '30px 30px',
             borderRadius: '5px',
             boxShadow: '3px 4px 10px 0px rgb(159 123 206 / 61%)',
+            // 3px 5px 10px 0px #aea4c2;
             borderBottom: `10px solid ${theme.palette.primary.main}99`,
             display: 'flex',
             justifyContent: 'center',
@@ -39,12 +40,13 @@ const useStyles = makeStyles((theme) => {
         },
         newBoard: {
             // backgroundColor: `${theme.palette.primary.main}10`,
+            color: '#fff',
             padding: '10px',
             height: '130px',
             width: '240px',
             margin: '30px 30px',
             borderRadius: '5px',
-            boxShadow: '3px 4px 10px 0px rgb(159 123 206 / 61%)',
+            boxShadow: '3px 4px 10px 0px #aea4c2',
             borderBottom: `10px solid ${theme.palette.fourth.main}99`,
             display: 'flex',
             justifyContent: 'center',
