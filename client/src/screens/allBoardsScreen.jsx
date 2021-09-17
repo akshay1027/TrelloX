@@ -1,5 +1,5 @@
 import React, { lazy, useEffect, useState } from 'react';
-import { Box, Typography, createStyles, makeStyles, Grid, Button, IconButton, CircularProgress, Modal, TextField, Container } from '@material-ui/core';
+import { Box, Typography, createStyles, makeStyles, Button, CircularProgress, Modal, TextField, Container } from '@material-ui/core';
 
 import { NavLink, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -9,37 +9,43 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 
 import api from '../config/axiosConfig';
-import axios from 'axios';
 
 import setAuthHeader from '../utils/authHeader';
 
+import '../App.css';
+
 const Navbar = lazy(() => import('../components/navbar'));
-const NewBoard = lazy(() => import('../components/newBoard'));
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         boards: {
-            backgroundColor: `${theme.palette.primary.main}10.`,
+            backgroundColor: `${theme.palette.primary.main}23`,
+            color: '#000',
             padding: '10px',
             height: '130px',
             width: '240px',
             margin: '30px 30px',
             borderRadius: '5px',
             boxShadow: '3px 4px 10px 0px rgb(159 123 206 / 61%)',
+            // 3px 5px 10px 0px #aea4c2;
             borderBottom: `10px solid ${theme.palette.primary.main}99`,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
+            '&:hover': {
+                backgroundColor: `${theme.palette.primary.main}23`
+            }
         },
         newBoard: {
-            backgroundColor: `${theme.palette.primary.main}10`,
+            // backgroundColor: `${theme.palette.primary.main}10`,
+            color: '#000',
             padding: '10px',
             height: '130px',
             width: '240px',
             margin: '30px 30px',
             borderRadius: '5px',
-            boxShadow: '3px 4px 10px 0px rgb(159 123 206 / 61%)',
+            boxShadow: '3px 4px 10px 0px #aea4c2',
             borderBottom: `10px solid ${theme.palette.fourth.main}99`,
             display: 'flex',
             justifyContent: 'center',
@@ -81,7 +87,7 @@ const useStyles = makeStyles((theme) => {
 );
 
 // 1) Add New Board + 2) All Boards
-const allBoardsScreen = () => {
+const AllBoardsScreen = () => {
     const classes = useStyles();
     const history = useHistory();
     const { enqueueSnackbar } = useSnackbar();
@@ -114,9 +120,6 @@ const allBoardsScreen = () => {
                 }
             );
             setAllBoards(res.data);
-            console.log(res.data);
-            // enqueueSnackbar('Sign Up Successful', { variant: 'success', autoHideDuration: 2000 });
-            // history.push('/boards');
         } catch (error) {
             enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
         }
@@ -130,7 +133,7 @@ const allBoardsScreen = () => {
         validateOnChange: true,
         onSubmit: async (values) => {
             try {
-                const res = await api.post('/api/boards/newBoard',
+                await api.post('/api/boards/newBoard',
                     values,
                     {
                         headers: {
@@ -142,8 +145,7 @@ const allBoardsScreen = () => {
                 setCreatedBoard(!createdBoard);
                 enqueueSnackbar('Board Created Successfully', { variant: 'success', autoHideDuration: 2000 });
             } catch (error) {
-                enqueueSnackbar(error.response.data.errors.msg, { variant: 'error', autoHideDuration: 4000 });
-                formik.setStatus(error.response.data.errors.msg);
+                enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
             }
         },
         validate: (values) => {
@@ -206,8 +208,8 @@ const allBoardsScreen = () => {
     };
 
     return (
-        <>
-            <Navbar />
+        <div className='boardsBgImage'>
+            <Navbar isBoard={false} />
             <Box>
                 {newBoard}
             </Box>
@@ -220,7 +222,7 @@ const allBoardsScreen = () => {
                             : allBoards.map((board, i) => {
                                 return (
                                     <>
-                                        <NavLink to={`/boards/${board._id}`} className={classes.navLink} >
+                                        <NavLink to={`/board/${board._id}`} className={classes.navLink}>
                                             <Box className={classes.boards} key={i}>
                                                 <Typography variant='subtitle1' style={{ letterSpacing: '-0.5px' }}>{board.boardTitle}</Typography>
                                             </Box>
@@ -231,8 +233,8 @@ const allBoardsScreen = () => {
                     }
                 </Box>
             </Container>
-        </>
+        </div>
     );
 };
 
-export default allBoardsScreen;
+export default AllBoardsScreen;

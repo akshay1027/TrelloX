@@ -26,7 +26,7 @@ exports.addNewBoard = async (req, res) => {
         // console.log(' User modal = ', user);
 
         // Add new activity in board, refer BoardModal for more clarification
-        newBoardCreated.activity.unshift({ text: `${user.name} created a board named ${boardTitle}` });
+        newBoardCreated.activity.unshift({ text: `${user.name} created a board named '${boardTitle}'` });
         await newBoardCreated.save();
         // console.log(' Board modal = ', newBoardCreated);
 
@@ -125,14 +125,14 @@ exports.updateBoardTitle = async (req, res) => {
 exports.getBoardActivity = async (req, res) => {
 
     const boardId = req.params.boardId;
-
+    console.log(boardId);
     try {
         const boardData = await BoardModal.findById(boardId);
-        if (!board) {
+        if (!boardData) {
             return res.status(404).json({ msg: 'Board not found' });
         }
-
-        res.json(boardData.activity);
+        console.log(boardData.activity);
+        res.status(200).json(boardData.activity);
     } catch (err) {
         console.error(error.message);
         res.status(500).send('Internal server error');

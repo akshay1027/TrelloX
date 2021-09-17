@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     AppBar, IconButton, Toolbar, Typography,
     createStyles, makeStyles,
     Box, Drawer, Tooltip
 } from '@material-ui/core';
 
-// import MainDrawerContent from './mainDrawerContent';
+import BoardActivity from './boardActivity';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 // import Brightness5Icon from '@material-ui/icons/Brightness5';
 // import Brightness4Icon from '@material-ui/icons/Brightness4';
 
-export const mainDrawerWidth = 280;
+export const mainDrawerWidth = 300;
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) =>
         //     }
         // }
         appBar: {
-            color: `${theme.palette.fourth.main}`,
-            backgroundColor: `${theme.palette.primary.main}`,
+            color: `${theme.palette.primary.main}`,
+            backgroundColor: `${theme.palette.fourth.main}`,
             zIndex: theme.zIndex.drawer + 1
         },
         drawer: {
@@ -35,12 +35,13 @@ const useStyles = makeStyles((theme) =>
         },
         drawerPaper: {
             width: mainDrawerWidth,
-            backgroundColor: `${theme.palette.fourth.main}`
+            backgroundColor: '#f0f0f0'
+            // color: `${theme.palette.third.main}`
         }
     })
 );
 
-const MainAppBar = () => {
+const Navbar = ({ isBoard }) => {
     const classes = useStyles();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -68,38 +69,44 @@ const MainAppBar = () => {
             <AppBar position="sticky" className={classes.appBar}>
                 <Toolbar>
                     <Box display="flex" alignItems='center' justifyContent='space-between' style={{ width: '100%', height: '100%' }}>
-                        <Tooltip title='Home'>
-                            <IconButton edge="start" color="inherit" aria-label="home">
-                                <HomeIcon style={{ fontSize: '27px' }} />
-                            </IconButton>
+                        {isBoard &&
+                            <Tooltip title='Home'>
+                                <IconButton edge="start" color="inherit" aria-label="home">
+                                    <HomeIcon style={{ fontSize: '27px' }} />
+                                </IconButton>
+                            </Tooltip>
+                        }
+                        <Tooltip title='Billion Dollar Company 😜'>
+                            <Typography style={{ fontWeight: 700, fontSize: '25px', marginRight: '5px' }} >
+                                TrelloX
+                            </Typography>
                         </Tooltip>
-                        <Typography style={{ fontWeight: 700, fontSize: '25px', marginRight: '5px' }} >
-                            TrelloX
-                        </Typography>
-                        <Tooltip title='Logout'>
-                            <IconButton edge="start" color="inherit" aria-label="menu" onClick={(e) => setIsOpen(!isOpen)}>
-                                <MenuIcon style={{ fontSize: '27px' }} />
-                            </IconButton>
-                        </Tooltip>
+                        {isBoard &&
+                            <Tooltip title='Menu'>
+                                <IconButton edge="start" color="inherit" aria-label="menu" onClick={(e) => setIsOpen(!isOpen)}>
+                                    <MenuIcon style={{ fontSize: '27px' }} />
+                                </IconButton>
+                            </Tooltip>
+                        }
                         {/* <IconButton edge="start" color="inherit" aria-label="dark theme" onClick={(e) => setIsDarkmode(!isDarkmode)}>
                         {isDarkmode ? <Brightness5Icon /> : <Brightness4Icon />}
                     </IconButton> */}
                     </Box>
                 </Toolbar>
             </AppBar>
-            {/* {
+            {
                 isOpen
                     ? <nav className={classes.drawer}>
                         <Drawer classes={{ paper: classes.drawerPaper }} variant='permanent' anchor='right'>
-                            <MainDrawerContent isOpen = {isOpen} setIsOpen = {setIsOpen}/>
+                            <BoardActivity isOpen={isOpen} setIsOpen={setIsOpen} />
                         </Drawer>
                     </nav>
                     : <>
                     </>
-            } */}
+            }
 
         </>
     );
 };
 
-export default MainAppBar;
+export default Navbar;

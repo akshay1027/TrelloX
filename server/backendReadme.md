@@ -59,3 +59,11 @@ RootServer -> Routes -> Middlewares(authorisation + validation) -> Controllers
    2) import, export error
    3) wrong file location
 
+2) https://stackoverflow.com/questions/40500490/what-is-an-unhandled-promise-rejection. 
+   I made a typo mistake.
+
+### API Endpoints
+1) baseUrl/api/boards/newBoard
+2) baseUrl/api/boards/allBoards
+2) baseUrl/api/boards/:boardId
+3) baseUrl/api/boards/activity/:boardId

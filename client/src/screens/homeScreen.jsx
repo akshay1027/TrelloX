@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => {
 }
 );
 
-const homeScreen = () => {
+const HomeScreen = () => {
     const classes = useStyles();
     const history = useHistory();
 
@@ -138,4 +138,4 @@ const homeScreen = () => {
     );
 };
 
-export default homeScreen;
+export default HomeScreen;
