@@ -1,10 +1,10 @@
 import {
-    Box, Divider, List, ListItem, ListItemIcon, ListItemText,
+    Box, Divider, List, ListItem, ListItemText,
     createStyles, makeStyles, CircularProgress, Typography, Button
 } from '@material-ui/core';
 
 import React, { useEffect, useState } from 'react';
-import { NavLink, useLocation, useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 // import PersonIcon from '@material-ui/icons/Person';
 // import DashboardIcon from '@material-ui/icons/Dashboard';
 // import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => {
 }
 );
 
-const MainDrawerContent = ({ isOpen, setIsOpen }) => {
+const BoardActivity = ({ isOpen, setIsOpen }) => {
     // const boardId = props.match.params.boardId;
     const { boardId } = useParams();
     const history = useHistory();
@@ -124,4 +124,4 @@ const MainDrawerContent = ({ isOpen, setIsOpen }) => {
     );
 };
 
-export default MainDrawerContent;
+export default BoardActivity;

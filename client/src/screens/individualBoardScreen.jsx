@@ -1,15 +1,17 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { Box, Typography, LinearProgress, Button, makeStyles, createStyles, Modal, TextField, IconButton } from '@material-ui/core';
+import { Box, Typography, LinearProgress, Button, makeStyles, createStyles, Modal, TextField, IconButton, Tooltip, Paper } from '@material-ui/core';
 
 import Navbar from '../components/navbar';
 
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
 
 import '../App.css';
 
 import api from '../config/axiosConfig';
+
+import BoardTitle from '../components/boardTitle';
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -75,15 +77,17 @@ const useStyles = makeStyles((theme) => {
 }
 );
 
-const individualBoard = (props) => {
+// All Lists and cards in a board
+const IndividualBoard = (props) => {
     const boardId = props.match.params.boardId;
     const { enqueueSnackbar } = useSnackbar();
 
     return (
         <div className='bgImage'>
             <Navbar isBoard={true} />
+            <BoardTitle />
         </div >
     );
 };
 
-export default individualBoard;
+export default IndividualBoard;

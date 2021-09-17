@@ -1,5 +1,5 @@
 import React, { lazy, useEffect, useState } from 'react';
-import { Box, Typography, createStyles, makeStyles, Grid, Button, IconButton, CircularProgress, Modal, TextField, Container } from '@material-ui/core';
+import { Box, Typography, createStyles, makeStyles, Button, CircularProgress, Modal, TextField, Container } from '@material-ui/core';
 
 import { NavLink, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -9,7 +9,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 
 import api from '../config/axiosConfig';
-import axios from 'axios';
 
 import setAuthHeader from '../utils/authHeader';
 
@@ -20,8 +19,8 @@ const Navbar = lazy(() => import('../components/navbar'));
 const useStyles = makeStyles((theme) => {
     return createStyles({
         boards: {
-            backgroundColor: `${theme.palette.fourth.main}`,
-            color: '#f5f5f5',
+            backgroundColor: `${theme.palette.primary.main}23`,
+            color: '#000',
             padding: '10px',
             height: '130px',
             width: '240px',
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => {
         },
         newBoard: {
             // backgroundColor: `${theme.palette.primary.main}10`,
-            color: '#fff',
+            color: '#000',
             padding: '10px',
             height: '130px',
             width: '240px',
@@ -88,7 +87,7 @@ const useStyles = makeStyles((theme) => {
 );
 
 // 1) Add New Board + 2) All Boards
-const allBoardsScreen = () => {
+const AllBoardsScreen = () => {
     const classes = useStyles();
     const history = useHistory();
     const { enqueueSnackbar } = useSnackbar();
@@ -121,7 +120,6 @@ const allBoardsScreen = () => {
                 }
             );
             setAllBoards(res.data);
-            console.log(res.data);
         } catch (error) {
             enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
         }
@@ -239,4 +237,4 @@ const allBoardsScreen = () => {
     );
 };
 
-export default allBoardsScreen;
+export default AllBoardsScreen;

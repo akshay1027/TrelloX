@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     AppBar, IconButton, Toolbar, Typography,
     createStyles, makeStyles,
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) =>
     })
 );
 
-const MainAppBar = ({ isBoard }) => {
+const Navbar = ({ isBoard }) => {
     const classes = useStyles();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -109,4 +109,4 @@ const MainAppBar = ({ isBoard }) => {
     );
 };
 
-export default MainAppBar;
+export default Navbar;

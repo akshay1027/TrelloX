@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 // import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import {
@@ -12,7 +12,7 @@ const HomeScreen = lazy(() => import('./screens/homeScreen'));
 const SignUpScreen = lazy(() => import('./screens/signUpScreen'));
 const SignInScreen = lazy(() => import('./screens/signInscreen'));
 const AllBoardsScreen = lazy(() => import('./screens/allBoardsScreen'));
-const IndividualBoard = lazy(() => import('./screens/individualBoard'));
+const IndividualBoard = lazy(() => import('./screens/individualBoardScreen'));
 
 // if (localStorage.trelloToken) {
 //     setAuthHeader(localStorage.trelloToken);
