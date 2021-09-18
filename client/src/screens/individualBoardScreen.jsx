@@ -11,7 +11,7 @@ import '../App.css';
 
 import api from '../config/axiosConfig';
 
-import BoardTitle from '../components/boardTitle';
+import BoardTitle from '../components/boardComponents/boardTitle';
 
 const useStyles = makeStyles((theme) => {
     return createStyles({

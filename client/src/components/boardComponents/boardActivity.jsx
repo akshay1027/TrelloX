@@ -14,7 +14,7 @@ import { useParams, useHistory } from 'react-router-dom';
 // import HowToRegIcon from '@material-ui/icons/HowToReg';
 // import LockOpenIcon from '@material-ui/icons/LockOpen';
 // import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
-import api from '../config/axiosConfig';
+import api from '../../config/axiosConfig';
 
 import Moment from 'react-moment';
 import { useSnackbar } from 'notistack';
@@ -28,7 +28,8 @@ const useStyles = makeStyles((theme) => {
         button: {
             backgroundColor: '#ed4779',
             color: '#f5f5f5',
-            marginTop: '1px',
+            marginTop: '20px',
+            marginBottom: '20px',
             '&:hover': {
                 cursor: 'pointer',
                 backgroundColor: '#f7346f'
@@ -67,6 +68,7 @@ const BoardActivity = ({ isOpen, setIsOpen }) => {
         enqueueSnackbar('Logged out, sign in again?', { variant: 'success', autoHideDuration: 3000 });
         history.push('/');
     };
+
     useEffect(() => {
         fetchActivity();
     }, []);

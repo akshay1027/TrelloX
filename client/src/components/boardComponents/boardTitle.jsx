@@ -4,9 +4,7 @@ import { Box, Typography, TextField, IconButton, Tooltip } from '@material-ui/co
 import { useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
-import '../App.css';
-
-import api from '../config/axiosConfig';
+import api from '../../config/axiosConfig';
 
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
