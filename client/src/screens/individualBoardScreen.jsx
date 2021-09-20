@@ -6,6 +6,7 @@ import Navbar from '../components/navbar';
 import { NavLink, useHistory, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useSnackbar } from 'notistack';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import '../App.css';
 
@@ -15,63 +16,17 @@ import BoardTitle from '../components/boardComponents/boardTitle';
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
-        boards: {
-            backgroundColor: `${theme.palette.primary.main}10.`,
-            padding: '10px',
-            height: '130px',
-            width: '240px',
-            margin: '30px 30px',
-            borderRadius: '5px',
-            boxShadow: '3px 4px 10px 0px rgb(159 123 206 / 61%)',
-            borderBottom: `10px solid ${theme.palette.primary.main}99`,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            textAlign: 'center'
-        },
-        newBoard: {
-            backgroundColor: `${theme.palette.primary.main}10`,
-            padding: '10px',
-            height: '130px',
-            width: '240px',
-            margin: '30px 30px',
-            borderRadius: '5px',
-            boxShadow: '3px 4px 10px 0px rgb(159 123 206 / 61%)',
-            borderBottom: `10px solid ${theme.palette.fourth.main}99`,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            textAlign: 'center',
-            outline: 'none',
-            flexDirection: 'column',
-            '&:hover': {
-                cursor: 'pointer'
-            }
-        },
-        paper: {
+        screen: {
             // display: 'flex',
-            // flexDirection: 'column',
-            width: '400px',
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            [theme.breakpoints.up('md')]: {
-                top: '5%',
-                maxHeight: '90vh'
-            },
-            [theme.breakpoints.down('sm')]: {
-                height: '100%'
-            },
-            overflowY: 'auto',
-            backgroundColor: theme.palette.background.paper,
-            border: '2px solid #000',
-            boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3)
+            maxWidth: '100vw',
+            overflowX: 'scroll',
+            height: '100vh'
         },
-        navLink: {
-            display: 'flex',
-            color: 'inherit',
-            textDecoration: 'none'
+        listbg: {
+            width: '300px',
+            backgroundColor: '#ebecf0',
+            marginLeft: theme.spacing(1),
+            marginTop: theme.spacing(1)
         }
     });
 }
@@ -81,11 +36,36 @@ const useStyles = makeStyles((theme) => {
 const IndividualBoard = (props) => {
     const boardId = props.match.params.boardId;
     const { enqueueSnackbar } = useSnackbar();
+    const classes = useStyles();
+
+    // const onDragEnd = () => {}
 
     return (
-        <div className='bgImage'>
+        <div className={classes.screen}>
             <Navbar isBoard={true} />
             <BoardTitle />
+            <DragDropContext onDragEnd={onDragEnd}>
+
+                <Droppable droppableId='list' type='list' direction='horizontal'>
+
+                    {(provided) => (
+
+                        <div className={classes.root}
+                            ref={provided.innerRef} {...provided.droppableProps}
+                        >
+
+                            {lists && lists.map((list, index) => {
+                                return <List list={list} key={list._id} index={index} />
+                            })}
+
+                            {/* <InputConainer type={'list'} />
+                            {provided.placeholder} */}
+                        </div>
+                    )}
+
+                </Droppable>
+
+            </DragDropContext>
         </div >
     );
 };
