@@ -38,34 +38,10 @@ const IndividualBoard = (props) => {
     const { enqueueSnackbar } = useSnackbar();
     const classes = useStyles();
 
-    // const onDragEnd = () => {}
-
     return (
         <div className={classes.screen}>
             <Navbar isBoard={true} />
             <BoardTitle />
-            <DragDropContext onDragEnd={onDragEnd}>
-
-                <Droppable droppableId='list' type='list' direction='horizontal'>
-
-                    {(provided) => (
-
-                        <div className={classes.root}
-                            ref={provided.innerRef} {...provided.droppableProps}
-                        >
-
-                            {lists && lists.map((list, index) => {
-                                return <List list={list} key={list._id} index={index} />
-                            })}
-
-                            {/* <InputConainer type={'list'} />
-                            {provided.placeholder} */}
-                        </div>
-                    )}
-
-                </Droppable>
-
-            </DragDropContext>
         </div >
     );
 };
