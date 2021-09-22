@@ -1,14 +1,14 @@
 const express = require('express');
-const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+
+// Express application, RESTful APIs
+const app = express();
+const server = require('http').createServer(app);
+const io = require("socket.io");
+
 const authentication = require('./routes/authentication');
-// const users = require('./routes/users');
-const boards = require('./routes/boards');
-const lists = require('./routes/lists');
-const cards = require('./routes/cards');
-// const checklists = require('./routes/checklists');
 
 dotenv.config();
 
@@ -18,8 +18,7 @@ const mongoDB_connectionOptions = {
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
-}
-
+};
 mongoose.connect(process.env.MONGO_URI, mongoDB_connectionOptions, (error) => {
     if (error) {
         return console.error('error: ', error);
@@ -27,32 +26,67 @@ mongoose.connect(process.env.MONGO_URI, mongoDB_connectionOptions, (error) => {
     console.log("mongoDB working succesfully");
 });
 
-// Express application, RESTful APIs
-const app = express();
-
-// CORS 
+// CORS & Parse incoming data
 app.use(cors());
-
-// parse incoming data
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+
+// Socket io and ChangeStream
+
+const socketIo = new io.Server(server, {
+    cors: {
+        origin: "http://localhost:3000/board",
+        credentials: true
+    }
+});
+
+socketIo.on('connection', function (socket) {
+    console.log('Client connected!');
+});
+
+const connection = mongoose.connection;
+
+connection.once('open', () => {
+    console.log("Change Stream successful");
+
+    const changeStream = connection.collection('usermodels').watch({ fullDocument: 'updateLookup' });
+
+    changeStream.on('change', (change) => {
+        switch (change.operationType) {
+            case 'insert':
+                const newUser = {
+                    _id: change.fullDocument._id,
+                    name: change.fullDocument.name,
+                    email: change.fullDocument.email,
+                    photo: change.fullDocument.photo,
+                    oldBG: change.fullDocument.background
+                }
+                console.log(newUser)
+                socketIo.emit('user-signed', newUser)
+                break;
+
+            case 'update':
+                const updatedUser = {
+                    _id: change.fullDocument._id,
+                    name: change.fullDocument.name,
+                    email: change.fullDocument.email,
+                    lists: change.fullDocument.lists,
+                    background: change.fullDocument.background
+                }
+                socketIo.emit('list-updated', updatedUser.lists)
+                break;
+        }
+    });
+});
 
 // Routes 
-// app.use('/api/users', users);
 app.use('/api/auth', authentication);
-app.use('/api/boards', boards);
-app.use('/api/lists', lists);
-app.use('/api/cards', cards);
-// app.use('/api/checklists', checklists);
+
+// Test
+app.get('/', (req, res) => res.send("Server is running"))
 
 // Server config listen to PORT
 const PORT = process.env.PORT || 5001;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`server started at PORT ${PORT}`);
 })
-
-// [1, 4, 3, 2].sort(
-//     (a, b) =>
-//       lists.findIndex((id) => id === a._id) - lists.findIndex((id) => id === b._id)
-//   ).map((list, index) => ({ list, index }));
