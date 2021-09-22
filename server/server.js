@@ -13,7 +13,7 @@ const cards = require('./routes/cards');
 dotenv.config();
 
 // MongoDB config for backend API
-const mongoDB_connectionOptions ={
+const mongoDB_connectionOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -21,7 +21,7 @@ const mongoDB_connectionOptions ={
 }
 
 mongoose.connect(process.env.MONGO_URI, mongoDB_connectionOptions, (error) => {
-    if(error) {
+    if (error) {
         return console.error('error: ', error);
     }
     console.log("mongoDB working succesfully");
@@ -48,6 +48,11 @@ app.use('/api/cards', cards);
 // Server config listen to PORT
 const PORT = process.env.PORT || 5001;
 
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log(`server started at PORT ${PORT}`);
 })
+
+// [1, 4, 3, 2].sort(
+//     (a, b) =>
+//       lists.findIndex((id) => id === a._id) - lists.findIndex((id) => id === b._id)
+//   ).map((list, index) => ({ list, index }));

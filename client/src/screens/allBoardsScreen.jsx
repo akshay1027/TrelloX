@@ -19,7 +19,7 @@ const Navbar = lazy(() => import('../components/navbar'));
 const useStyles = makeStyles((theme) => {
     return createStyles({
         boards: {
-            backgroundColor: `${theme.palette.primary.main}23`,
+            backgroundColor: '#fff',
             color: '#000',
             padding: '10px',
             height: '130px',
@@ -96,8 +96,6 @@ const AllBoardsScreen = () => {
     const [open, setOpen] = useState(false);
     const [createdBoard, setCreatedBoard] = useState(false);
 
-    const userName = localStorage.getItem('name') ? localStorage.getItem('name') : 'user';
-
     // if user not authenticated, return to home screen
     const token = localStorage.trelloToken;
     useEffect(() => {
@@ -125,93 +123,22 @@ const AllBoardsScreen = () => {
         }
     };
 
-    // New board api call
-    const formik = useFormik({
-        initialValues: {
-            boardTitle: ''
-        },
-        validateOnChange: true,
-        onSubmit: async (values) => {
-            try {
-                await api.post('/api/boards/newBoard',
-                    values,
-                    {
-                        headers: {
-                            'auth-token': token
-                        }
-                    }
-                );
-                setOpen(!open);
-                setCreatedBoard(!createdBoard);
-                enqueueSnackbar('Board Created Successfully', { variant: 'success', autoHideDuration: 2000 });
-            } catch (error) {
-                enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
-            }
-        },
-        validate: (values) => {
-            formik.setStatus('');
-            const errors = {};
-
-            // if (values.password?.length <= 6) { errors.password = 'Password length must be greater than 6'; }
-            return errors;
-        }
-    });
-
     useEffect(() => {
         fetchAllBoards();
     }, [createdBoard]);
 
     // Add new board component
-    const newBoard = () => {
-        return (
-            <>
-                <Box style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
-                    <Typography variant='h4' style={{ marginTop: '50px', color: '#2F2E41', fontWeight: 600 }}>
-                        Hello {userName} 👋
-                    </Typography >
-                    <Box className={classes.newBoard} onClick={() => setOpen(true)}>
-                        <AddIcon style={{ fontSize: '50px', marginBottom: '10px', background: '#e6e6e6', borderRadius: '27px', color: '#2F2E41' }} />
-                        <Typography variant='subtitle1'>
-                            Create New Board
-                        </Typography >
-                    </Box>
-                </Box>
-                <Modal open={open} onClose={() => setOpen(false)}>
-                    <Box className={classes.paper}>
-                        <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <h1>Create New Board</h1>
-                            <Button onClick={() => setOpen(false)}>
-                                <CloseIcon />
-                            </Button>
-                        </Box>
-                        <form onSubmit={formik.handleSubmit}>
-                            <TextField
-                                variant='outlined'
-                                margin='normal'
-                                required
-                                fullWidth
-                                label='Add Board Title'
-                                name="boardTitle"
-                                autoFocus
-                                onChange={formik.handleChange}
-                                value={formik.values.boardTitle}
-                                error={!!formik.errors.boardTitle}
-                                helperText={formik.errors.boardTitle} />
-                            <Button type='submit' fullWidth variant='contained' color='primary'>
-                                Create Board
-                            </Button>
-                        </form>
-                    </Box>
-                </Modal>
-            </>
-        );
-    };
 
     return (
         <div className='boardsBgImage'>
             <Navbar isBoard={false} />
             <Box>
-                {newBoard}
+                <NewBoard
+                    open={open}
+                    setOpen={setOpen}
+                    setCreatedBoard={setCreatedBoard}
+                    createdBoard={createdBoard}
+                />
             </Box>
 
             <Container maxWidth='lg'>
@@ -234,6 +161,88 @@ const AllBoardsScreen = () => {
                 </Box>
             </Container>
         </div>
+    );
+};
+
+const NewBoard = ({ open, setOpen, setCreatedBoard, createdBoard }) => {
+    const classes = useStyles();
+    const { enqueueSnackbar } = useSnackbar();
+
+    const userName = localStorage.getItem('name') ? localStorage.getItem('name') : 'user';
+
+    // New board api call
+    const formik = useFormik({
+        initialValues: {
+            boardTitle: ''
+        },
+        validateOnChange: true,
+        onSubmit: async (values) => {
+            try {
+                await api.post('/api/boards/newBoard',
+                    values,
+                    {
+                        headers: {
+                            'auth-token': localStorage.trelloToken
+                        }
+                    }
+                );
+                setOpen(!open);
+                setCreatedBoard(!createdBoard);
+                enqueueSnackbar('Board Created Successfully', { variant: 'success', autoHideDuration: 2000 });
+            } catch (error) {
+                enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000 });
+            }
+        },
+        validate: (values) => {
+            formik.setStatus('');
+            const errors = {};
+
+            // if (values.password?.length <= 6) { errors.password = 'Password length must be greater than 6'; }
+            return errors;
+        }
+    });
+
+    return (
+        <>
+            <Box style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                <Typography variant='h4' style={{ marginTop: '50px', color: '#2F2E41', fontWeight: 600 }}>
+                    Hello {userName} 👋
+                </Typography>
+                <Box className={classes.newBoard} onClick={() => setOpen(true)}>
+                    <AddIcon style={{ fontSize: '50px', marginBottom: '10px', background: '#e6e6e6', borderRadius: '27px', color: '#2F2E41' }} />
+                    <Typography variant='subtitle1'>
+                        Create New Board
+                    </Typography >
+                </Box>
+            </Box>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                <Box className={classes.paper}>
+                    <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <h1>Create New Board</h1>
+                        <Button onClick={() => setOpen(false)}>
+                            <CloseIcon />
+                        </Button>
+                    </Box>
+                    <form onSubmit={formik.handleSubmit}>
+                        <TextField
+                            variant='outlined'
+                            margin='normal'
+                            required
+                            fullWidth
+                            label='Add Board Title'
+                            name="boardTitle"
+                            autoFocus
+                            onChange={formik.handleChange}
+                            value={formik.values.boardTitle}
+                            error={!!formik.errors.boardTitle}
+                            helperText={formik.errors.boardTitle} />
+                        <Button type='submit' fullWidth variant='contained' color='primary'>
+                            Create Board
+                        </Button>
+                    </form>
+                </Box>
+            </Modal>
+        </>
     );
 };
 

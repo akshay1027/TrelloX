@@ -5,7 +5,7 @@ import {
     Box, Drawer, Tooltip
 } from '@material-ui/core';
 
-import BoardActivity from './boardActivity';
+import BoardActivity from '../components/boardComponents/boardActivity';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
@@ -95,14 +95,12 @@ const Navbar = ({ isBoard }) => {
                 </Toolbar>
             </AppBar>
             {
-                isOpen
-                    ? <nav className={classes.drawer}>
-                        <Drawer classes={{ paper: classes.drawerPaper }} variant='permanent' anchor='right'>
-                            <BoardActivity isOpen={isOpen} setIsOpen={setIsOpen} />
-                        </Drawer>
-                    </nav>
-                    : <>
-                    </>
+                isOpen &&
+                <nav className={classes.drawer}>
+                    <Drawer classes={{ paper: classes.drawerPaper }} variant='permanent' anchor='right'>
+                        <BoardActivity isOpen={isOpen} setIsOpen={setIsOpen} />
+                    </Drawer>
+                </nav>
             }
 
         </>
