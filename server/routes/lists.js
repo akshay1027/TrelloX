@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { 
+const {
     addNewList,
     allLists,
     listById,
@@ -11,11 +11,11 @@ const {
 // Middleware to check if user is Authenticated
 const { authenticatedUser } = require('../middlewares/authorization/authenticatedUser');
 
-const { 
+const {
     addNewListValidation,
     listIdValidation,
     boardIdValidation,
-    updateListTitleValidation 
+    updateListTitleValidation
 } = require('../middlewares/validators/listValidation');
 
 const router = express.Router();

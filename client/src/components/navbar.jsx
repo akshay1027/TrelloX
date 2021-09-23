@@ -5,7 +5,7 @@ import {
     Box, Drawer, Tooltip
 } from '@material-ui/core';
 
-import BoardActivity from '../components/boardComponents/boardActivity';
+import BoardActivity from './board/boardActivity';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';

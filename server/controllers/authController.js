@@ -35,12 +35,13 @@ const signInUser = async (req, res) => {
                 user: { id: user.id }
             },
             process.env.JWT_SECRET,
-            { expiresIn: 360000 },
+            { expiresIn: 3600000000 },
             (error, token) => {
                 if (error) throw error;
                 res.json({ token, name });
             }
         );
+
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');
@@ -82,12 +83,13 @@ const signUpUser = async (req, res) => {
                 user: { id: newUser.id, },
             },
             process.env.JWT_SECRET,
-            { expiresIn: 360000 },
+            { expiresIn: 3600000000 },
             (error, token) => {
                 if (error) throw error;
                 res.json({ token });
             }
         );
+
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');

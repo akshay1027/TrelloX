@@ -8,7 +8,8 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require("socket.io");
 
-const authentication = require('./routes/authentication');
+const authenticationRoutes = require('./routes/authentication');
+const boardRoutes = require('./routes/lists');
 
 dotenv.config();
 
@@ -39,14 +40,17 @@ const socketIo = new io.Server(server, {
     }
 });
 
+// Check if socket connection is establised
 socketIo.on('connection', function (socket) {
     console.log('Client connected!');
 });
 
+// connect to mongoose, later used for watching changes using changeStream
 const connection = mongoose.connection;
 
+// mongoose connection is establised
 connection.once('open', () => {
-    console.log("Change Stream successful");
+    console.log("mongoose connection is establised successful");
 
     const changeStream = connection.collection('usermodels').watch({ fullDocument: 'updateLookup' });
 
@@ -57,11 +61,10 @@ connection.once('open', () => {
                     _id: change.fullDocument._id,
                     name: change.fullDocument.name,
                     email: change.fullDocument.email,
-                    photo: change.fullDocument.photo,
-                    oldBG: change.fullDocument.background
+                    password: change.fullDocument.password
                 }
                 console.log(newUser)
-                socketIo.emit('user-signed', newUser)
+                socketIo.emit('user-created', newUser)
                 break;
 
             case 'update':
@@ -70,7 +73,7 @@ connection.once('open', () => {
                     name: change.fullDocument.name,
                     email: change.fullDocument.email,
                     lists: change.fullDocument.lists,
-                    background: change.fullDocument.background
+                    activity: change.fullDocument.activity
                 }
                 socketIo.emit('list-updated', updatedUser.lists)
                 break;
@@ -79,7 +82,8 @@ connection.once('open', () => {
 });
 
 // Routes 
-app.use('/api/auth', authentication);
+app.use('/api/auth', authenticationRoutes);
+app.use('/api/board', boardRoutes);
 
 // Test
 app.get('/', (req, res) => res.send("Server is running"))

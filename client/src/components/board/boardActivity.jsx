@@ -5,22 +5,10 @@ import {
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-// import PersonIcon from '@material-ui/icons/Person';
-// import DashboardIcon from '@material-ui/icons/Dashboard';
-// import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-// import FlareIcon from '@material-ui/icons/Flare';
-// import HomeIcon from '@material-ui/icons/Home';
-// import VpnKeyIcon from '@material-ui/icons/VpnKey';
-// import HowToRegIcon from '@material-ui/icons/HowToReg';
-// import LockOpenIcon from '@material-ui/icons/LockOpen';
-// import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import api from '../../config/axiosConfig';
 
 import Moment from 'react-moment';
 import { useSnackbar } from 'notistack';
-// import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
-// import DescriptionIcon from '@material-ui/icons/Description';
-// import PagesIcon from '@material-ui/icons/Pages';
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -90,18 +78,14 @@ const BoardActivity = ({ isOpen, setIsOpen }) => {
             </Box>
             {activity === undefined
                 ? (
-                    <>
-                        <Box className='board-loading'>
-                            <CircularProgress />
-                        </Box>
-                    </>
+                    <Box>
+                        <CircularProgress />
+                    </Box>
                 )
                 : activity.slice(0, activityLists * 5).map((activity, i) => { // will map over the latest 5 activities
                     return (
                         <List component='div' key={i}>
                             <ListItem>
-                                {/* <Typography style={{ fontSize: '13px' }}>{activity.text}</Typography>
-                                <Typography style={{ fontSize: '8px' }}><Moment fromNow>{activity.date}</Moment></Typography> */}
                                 <ListItemText
                                     primary={activity.text}
                                     secondary={<Moment fromNow>{activity.date}</Moment>}

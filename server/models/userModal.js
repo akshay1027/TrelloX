@@ -19,14 +19,11 @@ const userSchema = new Schema(
                     title: { type: String },
                     content: { type: String },
                     date: { type: String }
-                },
+                }
                 ]
             }
         ]
-    },
-    {
-        timestamps: true
     }
 );
 
-module.exports = UserModal = model('User', userSchema);
+module.exports = UserModal = model('UserModel', userSchema);

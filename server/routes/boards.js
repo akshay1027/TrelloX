@@ -19,14 +19,16 @@ const {
 
 const router = express.Router();
 
-router.post('/newBoard', authenticatedUser, addNewBoardValidation, addNewBoard);
+// update board Title
+router.patch('/updateTitle/:id', authenticatedUser, updateBoardTitleValidation, updateBoardTitle);
 
-router.get('/allBoards', authenticatedUser, allBoards);
+// create and upload list
+router.put('/upload/list/:id', authenticatedUser, addNewBoardValidation, addNewBoard);
 
-router.get('/:boardId', authenticatedUser, boardIdValidation, getBoardById);
+// create and upload card
+router.put('/upload/card/:id', authenticatedUser, allBoards);
 
-router.patch('/updateTitle/:boardId', authenticatedUser, updateBoardTitleValidation, updateBoardTitle);
-
-router.get('/activity/:boardId', authenticatedUser, boardIdValidation, getBoardActivity);
+// get the activity
+router.get('/activity/:id', authenticatedUser, boardIdValidation, getBoardActivity);
 
 module.exports = router;
