@@ -1,3 +1,5 @@
+/* eslint-disable brace-style */
+/* eslint-disable eqeqeq */
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Box, Typography, LinearProgress, Button, makeStyles, createStyles, Modal, TextField, IconButton, Tooltip, Paper } from '@material-ui/core';
 
@@ -14,18 +16,20 @@ import api from '../config/axiosConfig';
 
 import io from 'socket.io-client';
 
+import StoredApi from '../utils/storedApi';
 import BoardTitle from '../components/board/boardTitle';
-// import { updateCards, updateLists } from '../utils/Functions/allFunctions'
+import List from '../components/List/list';
+import InputContainer from '../components/inputContainer';
 
 const socket = io('"http://localhost:5001/');
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
         screen: {
-            // display: 'flex',
+            display: 'flex',
             maxWidth: '100vw',
             overflowX: 'scroll',
-            height: '100vh'
+            height: '91vh'
         },
         listbg: {
             width: '300px',
@@ -45,7 +49,9 @@ const IndividualBoard = (props) => {
 
     const [lists, setLists] = useState([]);
 
-    const addMoreCard = (title, index) => {
+    const user = JSON.parse(localStorage.getItem('DBUSER'));
+
+    const addCard = (title, index) => {
         const date = new Date();
 
         const newCard = {
@@ -66,7 +72,7 @@ const IndividualBoard = (props) => {
 
         const allLists = [...lists];
         allLists[index] = modList;
-        axios.put(`/upload/card/${user._id}`, { lists: allLists });
+        api.put(`/upload/card/${user._id}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
@@ -76,7 +82,7 @@ const IndividualBoard = (props) => {
         lists[listIndex].cards[cardIndex].content = content;
         const allLists = [...lists];
 
-        axios.put(`/upload/card/${user._id}`, { lists: allLists });
+        api.put(`/upload/card/${user._id}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
@@ -87,7 +93,7 @@ const IndividualBoard = (props) => {
         allCards.splice(cardIndex, 1);
         lists[listIndex].cards = allCards;
         const allLists = [...lists];
-        axios.put(`/upload/list/${user._id}`, { lists: allLists });
+        api.put(`/upload/list/${user._id}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
@@ -97,7 +103,7 @@ const IndividualBoard = (props) => {
         const list = lists[index];
         list.title = title;
         const allLists = [...lists];
-        axios.put(`/upload/list/${user._id}`, { lists: allLists });
+        api.put(`/upload/list/${user._id}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
@@ -106,7 +112,7 @@ const IndividualBoard = (props) => {
     const removeList = (index) => {
         const allLists = [...lists];
         allLists.splice(index, 1);
-        axios.put(`/upload/list/${user._id}`, { lists: allLists });
+        api.put(`/upload/list/${user._id}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
@@ -119,7 +125,7 @@ const IndividualBoard = (props) => {
         };
 
         const allLists = [...lists, newList];
-        axios.put(`/upload/list/${user._id}`, { lists: allLists });
+        api.put(`/upload/list/${user._id}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
@@ -138,7 +144,7 @@ const IndividualBoard = (props) => {
             lists[source.index] = lists[destination.index];
             lists[destination.index] = tempList;
             const allLists = [...lists];
-            axios.put(`/upload/card/${user._id}`, { lists: allLists });
+            api.put(`/upload/card/${user._id}`, { lists: allLists });
             socket.once('list-updated', newData => {
                 setLists(newData);
             });
@@ -156,7 +162,7 @@ const IndividualBoard = (props) => {
             destinationList.cards.splice(destination.index, 0, draggingCard);
 
             const allLists = [...lists];
-            axios.put(`/upload/card/${user._id}`, { lists: allLists });
+            api.put(`/upload/card/${user._id}`, { lists: allLists });
             socket.once('list-updated', newData => {
                 setLists(newData);
             });
@@ -168,7 +174,7 @@ const IndividualBoard = (props) => {
             destinationList.cards.splice(destinationList.index, 0, draggingCard);
 
             const allLists = [...lists];
-            axios.put(`/upload/card/${user._id}`, { lists: allLists });
+            api.put(`/upload/card/${user._id}`, { lists: allLists });
             socket.once('list-updated', newData => {
                 setLists(newData);
             });
@@ -176,32 +182,34 @@ const IndividualBoard = (props) => {
     };
 
     return (
-        <div className={classes.screen}>
-            <Navbar isBoard={true} />
-            <BoardTitle />
-            <DragDropContext onDragEnd={onDragEnd}>
-
-                <Droppable droppableId='list' type='list' direction='horizontal'>
-
-                    {(provided) => (
-
-                        <div className={classes.root}
-                            ref={provided.innerRef} {...provided.droppableProps}
-                        >
-
-                            {lists && lists.map((list, index) => {
-                                return <List list={list} key={list._id} index={index} />;
-                            })}
-
-                            {/* <InputConainer type={'list'} />
-                            {provided.placeholder} */}
-                        </div>
-                    )}
-
-                </Droppable>
-
-            </DragDropContext>
-        </div >
+        <StoredApi.Provider value={{
+            addCard,
+            addMoreList,
+            updateListTitle,
+            removeList,
+            updateCardContent,
+            removeCard
+        }}>
+            <div>
+                <Navbar isBoard={true} />
+                {/* <BoardTitle /> */}
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId='list' type='list' direction='horizontal'>
+                        {(provided) => (
+                            <div className={classes.screen}
+                                ref={provided.innerRef} {...provided.droppableProps}
+                            >
+                                {lists && lists.map((list, index) => {
+                                    return <List list={list} key={list._id} index={index} />;
+                                })}
+                                <InputContainer type={'list'} />
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+            </div >
+        </StoredApi.Provider>
     );
 };
 
