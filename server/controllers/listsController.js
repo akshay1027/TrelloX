@@ -4,22 +4,22 @@ const ListModal = require('../models/listModal');
 const BoardModal = require('../models/boardModal');
 
 // Create New list
-exports.addNewList = async(req, res) => {
-    
+exports.addNewList = async (req, res) => {
+
     try {
         const { listTitle } = req.body;
         const boardId = req.header('boardId');
-        
+
         // new list created
-        const newList = new ListModal({listTitle});
+        const newList = new ListModal({ listTitle });
         await newList.save();
 
         // list updated in board
         const board = await BoardModal.findById(boardId);
         board.lists.push(newList.id);
-        
+
         // activity updated in board
-        board.activity.unshift({text: `Created a list named ${listTitle}`});
+        board.activity.unshift({ text: `Created a list named ${listTitle}` });
         await board.save();
 
         res.status(200).json(newList);
@@ -30,7 +30,7 @@ exports.addNewList = async(req, res) => {
 }
 
 // All lists of a board
-exports.allLists = async(req, res) => {
+exports.allLists = async (req, res) => {
     try {
         const boardId = req.params.boardId;
         const board = await BoardModal.findById(boardId);
@@ -39,11 +39,11 @@ exports.allLists = async(req, res) => {
         }
 
         // All lists of a board
-        const finalLists = []; 
+        const finalLists = [];
         for (const listId of board.lists) {
             finalLists.push(await ListModal.findById(listId));
         }
-    
+
         res.status(200).json(finalLists);
     } catch (error) {
         console.error(error.message);
@@ -52,13 +52,13 @@ exports.allLists = async(req, res) => {
 }
 
 // Get a list by id
-exports.listById = async(req, res) => {
+exports.listById = async (req, res) => {
     try {
         const listId = req.param.listId;
 
         const list = await ListModal.findById(listId);
-        if(!list) {
-            res.status(404).json({msg: 'list not found'});
+        if (!list) {
+            res.status(404).json({ msg: 'list not found' });
         }
 
         res.status(200).json(list);
@@ -69,17 +69,17 @@ exports.listById = async(req, res) => {
 }
 
 // Update list Title
-exports.updateListTitle = async(req, res) => {
+exports.updateListTitle = async (req, res) => {
     try {
         const listId = req.param.listId;
         const newTitle = req.body.listTitle;
 
         const list = await ListModal.findById(listId);
-        if(!list) {
-            res.status(404).json({msg: 'list not found'});
+        if (!list) {
+            res.status(404).json({ msg: 'list not found' });
         }
 
-        if(list.title !== newTitle) {
+        if (list.title !== newTitle) {
             list.title = newTitle;
             await list.save();
         }
@@ -101,15 +101,15 @@ exports.updateListTitle = async(req, res) => {
 // splice(startIndex, remove, addItemsAfterRemovingFromStartIndex)
 
 // Move List 
-exports.moveList = async(req, res) => {
-    try {  
+exports.moveList = async (req, res) => {
+    try {
         const listId = req.param.listId;
         const toIndex = req.body.toIndex ? req.body.toIndex : 0;
         const boardId = req.header('boardId');
         const board = await BoardModal.findById(boardId);
 
-        if(!listId) {
-            res.status(404).json({msg: 'List not found'});
+        if (!listId) {
+            res.status(404).json({ msg: 'List not found' });
         }
 
         // splice(startIndex, remove, addItemsAfterRemovingFromStartIndex)

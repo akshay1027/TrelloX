@@ -31,12 +31,12 @@ const InputCard = ({ setOpen, listID, index, type }) => {
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar();
     const [title, setTitle] = useState();
-    const { addMoreCard, addMoreList } = useContext(StoredAPI);
+    const { addCard, addList } = useContext(StoredAPI);
 
     const handleAddCard = () => {
         // title length has to be within 3 to 20 characters
         if (title?.length <= 20 && title?.length >= 3) {
-            addMoreCard(title, index);
+            addCard(title, index);
             setOpen(false);
             setTitle('');
         } else {
@@ -48,7 +48,7 @@ const InputCard = ({ setOpen, listID, index, type }) => {
     const handleAddList = () => {
         // title length has to be within 3 to 20 characters, optional chaining to avoid error
         if (title?.length <= 20 && title?.length >= 3) {
-            addMoreCard(title, index);
+            addList(title);
             setOpen(false);
             setTitle('');
         } else {

@@ -15,7 +15,7 @@ const ListTitle = ({ title, index }) => {
     const { enqueueSnackbar } = useSnackbar();
     const { boardId } = useParams();
 
-    const { updateListTitle, removeList } = useContext(StoredAPI);
+    const { updateListTitle, deleteList } = useContext(StoredAPI);
 
     const [listTitle, setListTitle] = useState(title);
     const [editTitle, setEditTitle] = useState(false);

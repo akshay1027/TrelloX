@@ -21,7 +21,7 @@ import BoardTitle from '../components/board/boardTitle';
 import List from '../components/List/list';
 import InputContainer from '../components/inputContainer';
 
-const socket = io('"http://localhost:5001/');
+const socket = io('http://localhost:5001/');
 
 const useStyles = makeStyles((theme) => {
     return createStyles({
@@ -46,10 +46,36 @@ const IndividualBoard = (props) => {
     const boardId = props.match.params.boardId;
     const { enqueueSnackbar } = useSnackbar();
     const classes = useStyles();
+    const history = useHistory();
 
     const [lists, setLists] = useState([]);
 
-    const user = JSON.parse(localStorage.getItem('DBUSER'));
+    const userId = localStorage.getItem('userId');
+    const email = localStorage.getItem('email');
+
+    // useEffect(() => {
+    //     if (!localStorage.trelloToken) {
+    //         history.push('/');
+    //         // setAuthHeader(localStorage.trelloToken);
+    //     }
+    // });
+
+    const fetchAllLists = async () => {
+        try {
+            const res = await api.get(`api/board/allLists/${email}`);
+            console.log(res.data.lists);
+            setLists(res.data.lists);
+        } catch (error) {
+            console.error('error');
+        }
+    };
+
+    useEffect(() => {
+        if (!localStorage.trelloToken) {
+            history.push('/');
+        }
+        fetchAllLists();
+    }, []);
 
     const addCard = (title, index) => {
         const date = new Date();
@@ -72,28 +98,28 @@ const IndividualBoard = (props) => {
 
         const allLists = [...lists];
         allLists[index] = modList;
-        api.put(`/upload/card/${user._id}`, { lists: allLists });
+        api.put(`/api/board/upload/card/${userId}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
     };
 
-    const updateCardContent = (content, listIndex, cardIndex) => {
+    const updateCardDescription = (content, listIndex, cardIndex) => {
         lists[listIndex].cards[cardIndex].content = content;
         const allLists = [...lists];
 
-        api.put(`/upload/card/${user._id}`, { lists: allLists });
+        api.put(`/api/board/upload/card/${userId}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
     };
 
-    const removeCard = (listIndex, cardIndex) => {
+    const deleteCard = (listIndex, cardIndex) => {
         const allCards = lists[listIndex].cards;
         allCards.splice(cardIndex, 1);
         lists[listIndex].cards = allCards;
         const allLists = [...lists];
-        api.put(`/upload/list/${user._id}`, { lists: allLists });
+        api.put(`/api/board/upload/list/${userId}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
@@ -103,29 +129,29 @@ const IndividualBoard = (props) => {
         const list = lists[index];
         list.title = title;
         const allLists = [...lists];
-        api.put(`/upload/list/${user._id}`, { lists: allLists });
+        api.put(`/api/board/upload/list/${userId}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
     };
 
-    const removeList = (index) => {
+    const deleteList = (index) => {
         const allLists = [...lists];
         allLists.splice(index, 1);
-        api.put(`/upload/list/${user._id}`, { lists: allLists });
+        api.put(`/api/board/upload/list/${userId}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
     };
 
-    const addMoreList = (title) => {
+    const addList = (title) => {
         const newList = {
             title: title,
             cards: []
         };
 
         const allLists = [...lists, newList];
-        api.put(`/upload/list/${user._id}`, { lists: allLists });
+        api.put(`/api/board/upload/list/${userId}`, { lists: allLists });
         socket.once('list-updated', newData => {
             setLists(newData);
         });
@@ -144,7 +170,7 @@ const IndividualBoard = (props) => {
             lists[source.index] = lists[destination.index];
             lists[destination.index] = tempList;
             const allLists = [...lists];
-            api.put(`/upload/card/${user._id}`, { lists: allLists });
+            api.put(`api/upload/card/${userId}`, { lists: allLists });
             socket.once('list-updated', newData => {
                 setLists(newData);
             });
@@ -162,7 +188,7 @@ const IndividualBoard = (props) => {
             destinationList.cards.splice(destination.index, 0, draggingCard);
 
             const allLists = [...lists];
-            api.put(`/upload/card/${user._id}`, { lists: allLists });
+            api.put(`/api/board/upload/card/${userId}`, { lists: allLists });
             socket.once('list-updated', newData => {
                 setLists(newData);
             });
@@ -174,7 +200,7 @@ const IndividualBoard = (props) => {
             destinationList.cards.splice(destinationList.index, 0, draggingCard);
 
             const allLists = [...lists];
-            api.put(`/upload/card/${user._id}`, { lists: allLists });
+            api.put(`/api/board/upload/card/${userId}`, { lists: allLists });
             socket.once('list-updated', newData => {
                 setLists(newData);
             });
@@ -184,11 +210,11 @@ const IndividualBoard = (props) => {
     return (
         <StoredApi.Provider value={{
             addCard,
-            addMoreList,
+            addList,
             updateListTitle,
-            removeList,
-            updateCardContent,
-            removeCard
+            deleteList,
+            updateCardDescription,
+            deleteCard
         }}>
             <div>
                 <Navbar isBoard={true} />

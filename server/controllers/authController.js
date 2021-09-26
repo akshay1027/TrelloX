@@ -15,19 +15,18 @@ const signInUser = async (req, res) => {
 
     try {
         let user = await UserModal.findOne({ email });
-        const name = user.name;
 
         // check if user exists
         if (!user) {
-            return res.status(400).json({ errors: [{ msg: 'Invalid credentials. Try again?' }] });
+            return res.status(400).json({ error: 'Invalid credentials. Try again?' });
         }
+
+        const name = user.name;
 
         // Check for password match, String password === hashed password
         const isPasswordMatching = await bcrypt.compare(password, user.password);
         if (!isPasswordMatching) {
-            return res.status(400).json({
-                errors: [{ msg: 'Invalid credentials' }],
-            });
+            return res.status(400).json({ errors: 'Invalid credentials' });
         }
 
         jwt.sign(
@@ -38,13 +37,13 @@ const signInUser = async (req, res) => {
             { expiresIn: 3600000000 },
             (error, token) => {
                 if (error) throw error;
-                res.json({ token, name });
+                res.json({ token, name, id: user.id });
             }
         );
 
     } catch (error) {
         console.error(error.message);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
@@ -60,7 +59,7 @@ const signUpUser = async (req, res) => {
         let isUserExists = await UserModal.findOne({ email });
 
         if (isUserExists) {
-            return res.status(400).json({ errors: [{ msg: 'User with this Email ID Already Exists' }] })
+            return res.status(400).json({ error: 'User with this Email ID Already Exists' })
         }
 
         const generateSalt = await bcrypt.genSalt(10);
@@ -86,13 +85,13 @@ const signUpUser = async (req, res) => {
             { expiresIn: 3600000000 },
             (error, token) => {
                 if (error) throw error;
-                res.json({ token });
+                res.json({ token, id: newUser.id });
             }
         );
 
     } catch (error) {
         console.error(error.message);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 

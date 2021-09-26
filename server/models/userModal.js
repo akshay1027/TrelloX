@@ -5,13 +5,13 @@ const userSchema = new Schema(
         name: { type: String, required: true },
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        boardTitle: { type: String, required: true },
-        activity: [
-            {
-                text: { type: String },
-                date: { type: Date, default: Date.now }
-            }
-        ],
+        boardTitle: { type: String },
+        // activity: [
+        //     {
+        //         text: { type: String },
+        //         date: { type: Date, default: Date.now }
+        //     }
+        // ],
         lists: [
             {
                 title: { type: String },
@@ -26,4 +26,4 @@ const userSchema = new Schema(
     }
 );
 
-module.exports = UserModal = model('UserModel', userSchema);
+module.exports = UserModel = model('UserModel', userSchema);

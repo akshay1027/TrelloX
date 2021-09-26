@@ -1,6 +1,6 @@
 import { Box, Button, Container, TextField, Typography } from '@material-ui/core';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 
 import api from '../config/axiosConfig';
@@ -9,9 +9,23 @@ import { useSnackbar } from 'notistack';
 
 import Auth from '../assests/auth.svg';
 
+import io from 'socket.io-client';
+
+const clientSocket = io('http://localhost:5001/');
+
 const RegisterScreen = ({ match }) => {
+    clientSocket.on('connect', () => {
+        console.log('Client connected.');
+    });
+
     const { enqueueSnackbar } = useSnackbar();
     const history = useHistory();
+
+    useEffect(() => {
+        if (localStorage.getItem('trelloToken')) {
+            history.push('/board');
+        }
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -28,11 +42,13 @@ const RegisterScreen = ({ match }) => {
                 );
                 localStorage.setItem('trelloToken', res.data.token);
                 localStorage.setItem('name', values.name);
+                localStorage.setItem('userId', res.data.id);
+                localStorage.setItem('email', values.email);
                 enqueueSnackbar('Sign Up Successful', { variant: 'success', autoHideDuration: 2000 });
-                <Redirect to='/boards' />;
+                history.push('/board');
             } catch (error) {
-                enqueueSnackbar(error.response.data.errors.msg, { variant: 'error', autoHideDuration: 4000 });
-                formik.setStatus(error.response.data.errors.msg);
+                enqueueSnackbar(error.response.data.error, { variant: 'error', autoHideDuration: 4000 });
+                formik.setStatus(error.response.data.error);
             }
         },
         validate: (values) => {

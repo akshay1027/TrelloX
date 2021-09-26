@@ -9,7 +9,7 @@ const server = require('http').createServer(app);
 const io = require("socket.io");
 
 const authenticationRoutes = require('./routes/authentication');
-const boardRoutes = require('./routes/lists');
+const boardRoutes = require('./routes/boards');
 
 dotenv.config();
 
@@ -18,7 +18,7 @@ const mongoDB_connectionOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    // useFindAndModify: false
 };
 mongoose.connect(process.env.MONGO_URI, mongoDB_connectionOptions, (error) => {
     if (error) {
@@ -35,10 +35,12 @@ app.use(express.json());
 
 const socketIo = new io.Server(server, {
     cors: {
-        origin: "http://localhost:3000/board",
+        origin: "http://localhost:3000",
         credentials: true
     }
 });
+
+console.log('Hi server')
 
 // Check if socket connection is establised
 socketIo.on('connection', function (socket) {
@@ -73,7 +75,7 @@ connection.once('open', () => {
                     name: change.fullDocument.name,
                     email: change.fullDocument.email,
                     lists: change.fullDocument.lists,
-                    activity: change.fullDocument.activity
+                    // activity: change.fullDocument.activity
                 }
                 socketIo.emit('list-updated', updatedUser.lists)
                 break;

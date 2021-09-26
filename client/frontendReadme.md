@@ -6,6 +6,12 @@
 2) Using Breakpoints
 3) Using popup boxes
 4) Conditional editing values
+5) fade transitions
+
+### React learnings: 
+1) Splitting into components.
+2) React DnD
+3) Socket.io client
 
 ### Bugs: 
 1) Major bug when user sign in but the header is not set in axios and boards are not loaded as a result. When we reload page, it works. (still dont know why 😓)

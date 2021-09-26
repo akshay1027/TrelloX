@@ -7,15 +7,15 @@ const { Schema, model } = require('mongoose');
 
 const boardSchema = new Schema(
     {
-        boardTitle: {type: String, required: true},
+        boardTitle: { type: String, required: true },
         activity: [
             {
-                text: {type: String},
-                date: {type: Date, default: Date.now}
+                text: { type: String },
+                date: { type: Date, default: Date.now }
             }
         ],
         lists: [
-            {type: Schema.Types.ObjectId, ref: 'List'}
+            { type: Schema.Types.ObjectId, ref: 'List' }
         ],
         // members: [
         //     {
@@ -30,4 +30,4 @@ const boardSchema = new Schema(
     }
 )
 
-module.exports = BoardModal = model('Board', boardSchema);
+module.exports = BoardModel = model('Board', boardSchema);

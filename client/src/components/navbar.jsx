@@ -8,7 +8,6 @@ import {
 import BoardActivity from './board/boardActivity';
 
 import MenuIcon from '@material-ui/icons/Menu';
-import HomeIcon from '@material-ui/icons/Home';
 // import Brightness5Icon from '@material-ui/icons/Brightness5';
 // import Brightness4Icon from '@material-ui/icons/Brightness4';
 
@@ -45,42 +44,23 @@ const Navbar = ({ isBoard }) => {
     const classes = useStyles();
     const [isOpen, setIsOpen] = useState(false);
 
-    // Function to set darkmode to local storage
-    // const handleDarkMode = () => {
-    //     const localStroageDarkmode = localStorage.getItem('darkmode');
-
-    //     // Set darkTheme from localStorage, defaults to false (light theme)
-    //     localStroageDarkmode === 'true'
-    //         ? darkThemeLocalStorage = true
-    //         : darkThemeLocalStorage = false;
-    //     setIsDarkmode(darkThemeLocalStorage);
-    //     darkThemeLocalStorage
-    //         ? localStorage.setItem('darkmode', 'true')
-    //         : localStorage.setItem('darkmode', 'false');
-    // };
-
-    // // If theme is changed, call function
-    // useEffect(() => {
-    //     handleDarkMode();
-    // }, [isDarkmode]);
+    const userName = localStorage.getItem('name') ? localStorage.getItem('name') : 'user';
 
     return (
         <>
             <AppBar position="sticky" className={classes.appBar}>
                 <Toolbar>
                     <Box display="flex" alignItems='center' justifyContent='space-between' style={{ width: '100%', height: '100%' }}>
-                        {isBoard &&
-                            <Tooltip title='Home'>
-                                <IconButton edge="start" color="inherit" aria-label="home">
-                                    <HomeIcon style={{ fontSize: '27px' }} />
-                                </IconButton>
+                        {/* {isBoard &&
+                            <Tooltip title='Billion Dollar Company 😜'>
+                                <Typography style={{ fontWeight: 700, fontSize: '20px', marginRight: '0px' }} >
+                                    <em>TrelloX</em>
+                                </Typography>
                             </Tooltip>
-                        }
-                        <Tooltip title='Billion Dollar Company 😜'>
-                            <Typography style={{ fontWeight: 700, fontSize: '25px', marginRight: '5px' }} >
-                                TrelloX
-                            </Typography>
-                        </Tooltip>
+                        } */}
+                        <Typography style={{ fontWeight: 700, fontSize: '22px', marginRight: '5px' }} >
+                            Hello {userName} 👋
+                        </Typography>
                         {isBoard &&
                             <Tooltip title='Menu'>
                                 <IconButton edge="start" color="inherit" aria-label="menu" onClick={(e) => setIsOpen(!isOpen)}>
@@ -102,7 +82,6 @@ const Navbar = ({ isBoard }) => {
                     </Drawer>
                 </nav>
             }
-
         </>
     );
 };

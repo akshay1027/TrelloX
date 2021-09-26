@@ -75,24 +75,23 @@ const Card = ({ card, cardIndex, listIndex }) => {
     const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar();
 
-    const { updateCardContent, removeCard } = useContext(storedApi);
+    const { updateCardDescription, deleteCard } = useContext(storedApi);
 
     const [popup, setPopup] = useState(false);
     const [open, setOpen] = useState(false);
     const [content, setContent] = useState(card.content);
 
     const handleOnDone = () => {
-        if (content.length <= 1060) {
-            updateCardContent(content, listIndex, cardIndex);
+        if (content.length <= 200) {
+            updateCardDescription(content, listIndex, cardIndex);
             setOpen(!open);
         } else {
-            alert('Character limit exceeded. Try to add note within 1060 characters.');
-            enqueueSnackbar('Character limit exceeded(', { variant: 'error', autoHideDuration: 4000 });
+            enqueueSnackbar('Character limit exceeded than 200', { variant: 'error', autoHideDuration: 4000 });
         }
     };
 
     const handleDelete = () => {
-        removeCard(listIndex, cardIndex);
+        deleteCard(listIndex, cardIndex);
         setPopup(false);
     };
 

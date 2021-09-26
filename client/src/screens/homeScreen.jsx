@@ -71,7 +71,7 @@ const HomeScreen = () => {
     };
 
     if (localStorage.getItem('trelloToken')) {
-        history.push('/boards');
+        history.push('/board');
     }
 
     return (

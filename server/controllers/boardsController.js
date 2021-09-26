@@ -1,8 +1,8 @@
 const express = require('express');
 
 // Board DB modal & User Modal
-const BoardModal = require('../models/boardModal');
-const UserModal = require('../models/userModal');
+const BoardModel = require('../models/boardModal');
+const UserModel = require('../models/userModal');
 
 // Create New Board
 exports.addNewBoard = async (req, res) => {
@@ -14,7 +14,7 @@ exports.addNewBoard = async (req, res) => {
 
     try {
         // Create and Save board to database
-        const newBoard = new BoardModal({ boardTitle });
+        const newBoard = new BoardModel({ boardTitle });
         const newBoardCreated = await newBoard.save();
 
         // console.log(' new board created, title = ', newBoardCreated);
@@ -25,7 +25,7 @@ exports.addNewBoard = async (req, res) => {
         await user.save();
         // console.log(' User modal = ', user);
 
-        // Add new activity in board, refer BoardModal for more clarification
+        // Add new activity in board, refer BoardModel for more clarification
         newBoardCreated.activity.unshift({ text: `${user.name} created a board named '${boardTitle}'` });
         await newBoardCreated.save();
         // console.log(' Board modal = ', newBoardCreated);
@@ -49,10 +49,10 @@ exports.allBoards = async (req, res) => {
 
         const allBoards = [];
         /* UserModal.boards returns board Ids.
-           so we use this Id to get all details about the board from BoardModal
+           so we use this Id to get all details about the board from BoardModel
         */
         for (const boardId of user.boards) {
-            const boardData = await BoardModal.findById(boardId);
+            const boardData = await BoardModel.findById(boardId);
             allBoards.push(boardData);
         }
 
@@ -80,7 +80,7 @@ exports.getBoardById = async (req, res) => {
     const boardId = req.params.boardId;
 
     try {
-        const boardData = await BoardModal.findById(boardId);
+        const boardData = await BoardModel.findById(boardId);
 
         if (!boardData) {
             return res.status(404).json({ msg: 'Requested board not found' });
@@ -100,7 +100,7 @@ exports.updateBoardTitle = async (req, res) => {
     const newBoardTitle = req.body.boardTitle;
 
     try {
-        const boardData = await BoardModal.findById(boardId);
+        const boardData = await BoardModel.findById(boardId);
 
         if (!boardData) {
             return res.status(404).json({ msg: 'Requested board not found' });
@@ -124,17 +124,73 @@ exports.updateBoardTitle = async (req, res) => {
 // Get a board's activity
 exports.getBoardActivity = async (req, res) => {
 
-    const boardId = req.params.boardId;
-    console.log(boardId);
     try {
-        const boardData = await BoardModal.findById(boardId);
-        if (!boardData) {
+        const id = req.params.boardId;
+        const userData = await UserModel.findById(id);
+        if (!userData) {
             return res.status(404).json({ msg: 'Board not found' });
         }
-        console.log(boardData.activity);
-        res.status(200).json(boardData.activity);
+        // console.log(userData.activity);
+        res.status(200).json(userData.activity);
     } catch (err) {
         console.error(error.message);
         res.status(500).send('Internal server error');
     }
 };
+
+exports.addList = async (req, res) => {
+    try {
+        console.log('Hi')
+        const data = {
+            lists: req.body.lists
+        }
+        const id = req.params.id;
+
+        await UserModel.findByIdAndUpdate(id, data, (err, updatedData) => {
+            if (!err) res.send(`Updated lists.`)
+        })
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Internal server error');
+    }
+};
+
+exports.addCard = async (req, res) => {
+    try {
+        console.log('Hi')
+        const data = {
+            lists: req.body.lists
+        }
+        const id = req.params.id;
+
+        await UserModel.findByIdAndUpdate(id, data, (err, updatedData) => {
+            if (!err) res.send(`Updated cards.`)
+        })
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Internal server error');
+    }
+};
+
+exports.getAllLists = async (req, res) => {
+    try {
+        const email = req.params.email;
+
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+        // console.log(user);
+        res.status(200).json(user);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send(error);
+    }
+}
+// exports.addBoardActivity = async (req, res) => {
+//     try {
+//     } catch (error) {
+//         console.error(error.message);
+//         res.status(500).send('Internal server error');
+//     }
+// }
